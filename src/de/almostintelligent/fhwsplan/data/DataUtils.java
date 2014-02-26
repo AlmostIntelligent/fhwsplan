@@ -256,7 +256,7 @@ public class DataUtils implements ContentHandler
 		else if (localName.equalsIgnoreCase("termin"))
 		{
 			lectureLoading.addDate(lectureDateLoading);
-			lectureDateLoading.print();
+			// lectureDateLoading.print();
 			lectureDateLoading = null;
 		}
 	}
@@ -353,7 +353,7 @@ public class DataUtils implements ContentHandler
 		else if (localName.equalsIgnoreCase("veranstaltung"))
 		{
 			lectures.put(lectureLoading.getID(), lectureLoading);
-			lectureLoading.print();
+			// lectureLoading.print();
 			lectureLoading = null;
 		}
 	}
