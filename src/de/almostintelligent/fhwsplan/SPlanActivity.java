@@ -3,9 +3,7 @@ package de.almostintelligent.fhwsplan;
 import de.almostintelligent.fhwsplan.data.DataUtils;
 import android.os.Bundle;
 import android.app.Activity;
-import android.content.Context;
 import android.view.Menu;
-import android.widget.TextView;
 
 public class SPlanActivity extends Activity
 {
@@ -16,21 +14,21 @@ public class SPlanActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_splan);
 
-		final TextView text = (TextView) findViewById(R.id.hello_world);
-		text.setText("loading...");
-		final Context c = this;
-
-		Thread t = new Thread(new Runnable()
-		{
-
-			@Override
-			public void run()
-			{
-				DataUtils.get().load(c);
-				text.setText(getString(R.string.hello_world));
-			}
-		});
-		t.run();
+		// final TextView text = (TextView) findViewById(R.id.hello_world);
+		// text.setText("loading...");
+		// final Context c = this;
+		//
+		// Thread t = new Thread(new Runnable()
+		// {
+		//
+		// @Override
+		// public void run()
+		// {
+		DataUtils.get().load(this);
+		// text.setText(getString(R.string.hello_world));
+		// }
+		// });
+		// t.run();
 
 	}
 

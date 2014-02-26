@@ -2,6 +2,8 @@ package de.almostintelligent.fhwsplan.data;
 
 import java.util.Vector;
 
+import android.util.Log;
+
 public class Faculty
 {
 	private Integer			iID;
@@ -17,12 +19,22 @@ public class Faculty
 		return strShortName;
 	}
 
+	public void setShortName(String name)
+	{
+		strShortName = name;
+	}
+
 	/**
 	 * @return the strLongName
 	 */
 	public String getLongName()
 	{
 		return strLongName;
+	}
+
+	public void setLongName(String name)
+	{
+		strLongName = name;
 	}
 
 	/**
@@ -33,15 +45,31 @@ public class Faculty
 		return semester;
 	}
 
+	public void addSemester(Integer i)
+	{
+		semester.add(i);
+	}
+
 	public Integer getID()
 	{
 		return iID;
 	}
 
-	public Faculty(Integer id, String shortName, String longName)
+	public void setID(Integer id)
 	{
 		iID = id;
-		strShortName = shortName;
-		strLongName = longName;
 	}
+
+	public void print()
+	{
+		Log.e("faculty.id", iID.toString());
+		Log.e("faculty.short", strShortName);
+		Log.e("faculty.long", strLongName);
+		for (Integer i : semester)
+		{
+			Log.e("faculty.sem", i.toString());
+		}
+
+	}
+
 }

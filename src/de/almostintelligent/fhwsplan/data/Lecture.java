@@ -2,19 +2,23 @@ package de.almostintelligent.fhwsplan.data;
 
 import java.util.Vector;
 
+import android.util.Log;
+import android.util.SparseArray;
+
 public class Lecture
 {
 
-	private Integer				iID;
-	private Integer				iParent		= 0;
-	private String				strDescription;
-	private String				strDescAppendix;
-	private Integer				iDuration;
-	private Boolean				bOptional	= false;
-	private Boolean				bArranged	= true;
+	private Integer							iID;
+	private Integer							iParent						= 0;
+	private String							strDescription;
+	private String							strDescAppendix;
+	private Integer							iDuration;
+	private Boolean							bOptional					= false;
+	private Boolean							bArranged					= true;
 
-	private Vector<LectureDate>	dates		= new Vector<LectureDate>();
-	private Vector<Employee>	lecturers	= new Vector<Employee>();
+	private Vector<LectureDate>				dates						= new Vector<LectureDate>();
+	private Vector<Employee>				lecturers					= new Vector<Employee>();
+	private SparseArray<Vector<Integer>>	facultySemesterInLecture	= new SparseArray<Vector<Integer>>();
 
 	/**
 	 * @return the iID
@@ -24,12 +28,23 @@ public class Lecture
 		return iID;
 	}
 
+	public void setID(Integer id)
+	{
+		iID = id;
+		// Log.e("lecture.id", iID.toString());
+	}
+
 	/**
 	 * @return the iParent
 	 */
 	public Integer getParent()
 	{
 		return iParent;
+	}
+
+	public void setParent(Integer parent)
+	{
+		iParent = parent;
 	}
 
 	/**
@@ -80,7 +95,7 @@ public class Lecture
 		return dates;
 	}
 
-	public void AddDate(LectureDate l)
+	public void addDate(LectureDate l)
 	{
 		dates.add(l);
 	}
@@ -102,6 +117,63 @@ public class Lecture
 
 	public void addLecturer(Employee e)
 	{
+		if (e == null)
+			return;
 		lecturers.add(e);
+	}
+
+	public void addFacultySemester(Faculty f, Integer s)
+	{
+		if (facultySemesterInLecture.get(f.getID()) == null)
+		{
+			Vector<Integer> semester = new Vector<Integer>();
+			semester.add(s);
+			facultySemesterInLecture.put(f.getID(), semester);
+		}
+		else
+		{
+			facultySemesterInLecture.get(f.getID()).add(s);
+		}
+	}
+
+	public void print()
+	{
+		Log.e("lecture", iID.toString() + ": " + strDescription
+				+ (strDescAppendix != "" ? "" : " (" + strDescAppendix + ")"));
+		for (Employee e : lecturers)
+		{
+			Log.e("lecture.lecturer", e.getPrename() + " " + e.getSurname());
+		}
+		int key = 0;
+		for (int i = 0; i < facultySemesterInLecture.size(); i++)
+		{
+			key = facultySemesterInLecture.keyAt(i);
+
+			Faculty f = DataUtils.get().getFaculty(key);
+			String strMsg = f.getLongName();
+
+			for (Integer sem : facultySemesterInLecture.get(key))
+			{
+				strMsg = strMsg + " " + sem.toString();
+			}
+
+			Log.e("lecture.faculty", strMsg);
+		}
+
+	}
+
+	public void setDuration(Integer duration)
+	{
+		iDuration = duration;
+	}
+
+	public void setDescription(String desc)
+	{
+		strDescription = desc;
+	}
+
+	public void setDescAppendix(String appendix)
+	{
+		strDescAppendix = appendix;
 	}
 }

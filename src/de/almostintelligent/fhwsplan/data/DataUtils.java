@@ -38,9 +38,473 @@ public class DataUtils implements ContentHandler
 	private SparseArray<Room>		rooms		= new SparseArray<Room>();
 	private SparseArray<Employee>	employees	= new SparseArray<Employee>();
 	private SparseArray<Faculty>	faculties	= new SparseArray<Faculty>();
+	private SparseArray<Lecture>	lectures	= new SparseArray<Lecture>();
+
+	private String					currentValue;
+
+	// Variables for Loading Stuff
+	private boolean					bLoadingDays;
+	private Day						dayLoading;
+
+	private boolean					bLoadingPlanTimes;
+	private PlanTime				planTimeLoading;
+
+	private boolean					bLoadingRooms;
+	private Room					roomLoading;
+
+	private boolean					bLoadingEmployees;
+	private Employee				employeeLoading;
+
+	private boolean					bLoadingFaculties;
+	private Faculty					facultyLoading;
+
+	private boolean					bLoadingLecutres;
+	private Lecture					lectureLoading;
 
 	private DataUtils()
 	{
+	}
+
+	/**
+	 * @param d
+	 */
+	public void addDay(Day d)
+	{
+		days.put(d.getID(), d);
+	}
+
+	/**
+	 * @param e
+	 */
+	public void addEmployee(Employee e)
+	{
+		employees.put(e.getID(), e);
+	}
+
+	public void addFaculty(Faculty f)
+	{
+		faculties.put(f.getID(), f);
+	}
+
+	/**
+	 * @param r
+	 */
+	public void addRoom(Room r)
+	{
+		rooms.put(r.getID(), r);
+	}
+
+	/**
+	 * @param t
+	 */
+	public void addTime(PlanTime t)
+	{
+		times.put(t.getID(), t);
+	}
+
+	@Override
+	public void characters(char[] ch, int start, int length)
+			throws SAXException
+	{
+		currentValue = new String(ch, start, length);
+
+	}
+
+	private void endCreateInfoElement(String localName)
+	{
+		if (localName.equalsIgnoreCase("autor"))
+		{
+			createInfo.setAuthor(currentValue);
+		}
+		else if (localName.equalsIgnoreCase("version"))
+		{
+			createInfo.setVersion(currentValue);
+		}
+		else if (localName.equalsIgnoreCase("semestertyp"))
+		{
+			createInfo.setTermType(currentValue);
+		}
+	}
+
+	private void endDayElement(String localName)
+	{
+		if (localName.equalsIgnoreCase("kurz"))
+		{
+			dayLoading.setShortName(currentValue);
+		}
+		else if (localName.equalsIgnoreCase("lang"))
+		{
+			dayLoading.setLongName(currentValue);
+		}
+		else if (localName.equalsIgnoreCase("id"))
+		{
+			dayLoading.setID(Integer.valueOf(currentValue));
+		}
+		else if (localName.equalsIgnoreCase("tag"))
+		{
+			days.put(dayLoading.getID(), dayLoading);
+			// dayLoading.print();
+			dayLoading = null;
+		}
+	}
+
+	@Override
+	public void endDocument() throws SAXException
+	{
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void endElement(String uri, String localName, String qName)
+			throws SAXException
+	{
+
+		if (createInfo != null)
+		{
+			endCreateInfoElement(localName);
+		}
+
+		if (bLoadingDays)
+		{
+			if (dayLoading != null)
+			{
+				endDayElement(localName);
+			}
+			if (localName.equalsIgnoreCase("tage"))
+			{
+				bLoadingDays = false;
+			}
+		}
+		else if (bLoadingPlanTimes)
+		{
+			if (planTimeLoading != null)
+			{
+				endPlanTimeElement(localName);
+			}
+			if (localName.equalsIgnoreCase("zeiten"))
+			{
+				bLoadingPlanTimes = false;
+			}
+		}
+		else if (bLoadingRooms)
+		{
+			if (roomLoading != null)
+			{
+				endRoomElement(localName);
+			}
+			if (localName.equalsIgnoreCase("raeume"))
+			{
+				bLoadingRooms = false;
+			}
+		}
+		else if (bLoadingEmployees)
+		{
+			if (employeeLoading != null)
+			{
+				endEmployeeElement(localName);
+			}
+			if (localName.equalsIgnoreCase("mitarbeiter"))
+			{
+				bLoadingEmployees = false;
+			}
+		}
+		else if (bLoadingFaculties)
+		{
+			if (facultyLoading != null)
+			{
+				endFacultyElement(localName);
+			}
+			if (localName.equalsIgnoreCase("fachrichtungen"))
+			{
+				bLoadingFaculties = false;
+			}
+		}
+		else if (bLoadingLecutres)
+		{
+			if (lectureLoading != null)
+			{
+				endLectureElement(localName);
+			}
+			if (localName.equalsIgnoreCase("veranstaltungen"))
+			{
+				bLoadingLecutres = false;
+			}
+		}
+
+	}
+
+	private boolean		bLoadingLectureDate;
+	private LectureDate	lectureDateLoading;
+	private boolean		bLoadingLectureLecturer;
+	private boolean		bLoadingLectureFaculties;
+
+	private void endLectureDateElement(String localName)
+	{
+		if (localName.equalsIgnoreCase("tag"))
+		{
+			lectureDateLoading.setDay(getDay(Integer.valueOf(currentValue)));
+		}
+		else if (localName.equalsIgnoreCase("zeit"))
+		{
+			lectureDateLoading.setTime(getTime(Integer.valueOf(currentValue)));
+		}
+		else if (localName.equalsIgnoreCase("raum"))
+		{
+			lectureDateLoading.addRoom(getRoom(Integer.valueOf(currentValue)));
+		}
+		else if (localName.equalsIgnoreCase("termin"))
+		{
+			lectureLoading.addDate(lectureDateLoading);
+			lectureDateLoading.print();
+			lectureDateLoading = null;
+		}
+	}
+
+	private void endLectureLecturerElement(String localName)
+	{
+		if (localName.equalsIgnoreCase("id"))
+		{
+			lectureLoading.addLecturer(getEmployee(Integer
+					.valueOf(currentValue)));
+		}
+	}
+
+	private Integer	iLectureFacultyLoading;
+
+	private void endLectureFacultiesElement(String localName)
+	{
+		if (localName.equalsIgnoreCase("id"))
+		{
+			iLectureFacultyLoading = Integer.valueOf(currentValue);
+		}
+		else if (localName.equalsIgnoreCase("sem"))
+		{
+			lectureLoading.addFacultySemester(
+					getFaculty(iLectureFacultyLoading),
+					Integer.valueOf(currentValue));
+		}
+	}
+
+	private void endLectureElement(String localName)
+	{
+		if (bLoadingLectureDate)
+		{
+			if (lectureDateLoading != null)
+			{
+				endLectureDateElement(localName);
+			}
+			if (localName.equalsIgnoreCase("termine"))
+			{
+				bLoadingLectureDate = false;
+			}
+		}
+		else if (bLoadingLectureLecturer)
+		{
+			if (localName.equalsIgnoreCase("mitarbeiter"))
+			{
+				bLoadingLectureLecturer = false;
+			}
+			else
+				endLectureLecturerElement(localName);
+
+		}
+		else if (bLoadingLectureFaculties)
+		{
+			if (localName.equalsIgnoreCase("fachrichtungen"))
+			{
+				bLoadingLectureFaculties = false;
+			}
+			else
+				endLectureFacultiesElement(localName);
+		}
+		else if (localName.equalsIgnoreCase("id"))
+		{
+			lectureLoading.setID(Integer.valueOf(currentValue));
+		}
+		else if (localName.equalsIgnoreCase("parent"))
+		{
+			try
+			{
+				lectureLoading.setParent(Integer.valueOf(currentValue));
+			}
+			catch (java.lang.NumberFormatException e)
+			{
+				// e.printStackTrace();
+				lectureLoading.setParent(0);
+			}
+		}
+		else if (localName.equalsIgnoreCase("stunden"))
+		{
+			lectureLoading.setDuration(Integer.valueOf(currentValue));
+		}
+		else if (localName.equalsIgnoreCase("bezeichnung"))
+		{
+			lectureLoading.setDescription(currentValue);
+		}
+		else if (localName.equalsIgnoreCase("bez_zusatz"))
+		{
+			lectureLoading.setDescAppendix(currentValue);
+		}
+		else if (bLoadingLectureDate && localName.equalsIgnoreCase("termin"))
+		{
+			lectureDateLoading = new LectureDate();
+		}
+		else if (localName.equalsIgnoreCase("veranstaltung"))
+		{
+			lectures.put(lectureLoading.getID(), lectureLoading);
+			lectureLoading.print();
+			lectureLoading = null;
+		}
+	}
+
+	private void endFacultyElement(String localName)
+	{
+		if (localName.equalsIgnoreCase("kurz"))
+		{
+			facultyLoading.setShortName(currentValue);
+		}
+		else if (localName.equalsIgnoreCase("lang"))
+		{
+			facultyLoading.setLongName(currentValue);
+		}
+		else if (localName.equalsIgnoreCase("sem"))
+		{
+			facultyLoading.addSemester(Integer.valueOf(currentValue));
+		}
+		else if (localName.equalsIgnoreCase("id"))
+		{
+			facultyLoading.setID(Integer.valueOf(currentValue));
+		}
+		else if (localName.equalsIgnoreCase("fachrichtung"))
+		{
+			faculties.put(facultyLoading.getID(), facultyLoading);
+			// facultyLoading.print();
+			facultyLoading = null;
+		}
+	}
+
+	private void endEmployeeElement(String localName)
+	{
+
+		if (localName.equalsIgnoreCase("kuerzel"))
+		{
+			employeeLoading.setToken(currentValue);
+		}
+		else if (localName.equalsIgnoreCase("vorname"))
+		{
+			employeeLoading.setPrename(currentValue);
+		}
+		else if (localName.equalsIgnoreCase("nachname"))
+		{
+			employeeLoading.setSurname(currentValue);
+		}
+		else if (localName.equalsIgnoreCase("id"))
+		{
+			employeeLoading.setID(Integer.valueOf(currentValue));
+		}
+		else if (localName.equalsIgnoreCase("person"))
+		{
+			employees.put(employeeLoading.getID(), employeeLoading);
+			// employeeLoading.print();
+			employeeLoading = null;
+		}
+	}
+
+	private void endPlanTimeElement(String localName)
+	{
+		if (localName.equalsIgnoreCase("id"))
+		{
+			planTimeLoading.setID(Integer.valueOf(currentValue));
+		}
+		else if (localName.equalsIgnoreCase("bezeichnung"))
+		{
+			planTimeLoading.setDescription(currentValue);
+		}
+		else if (localName.equalsIgnoreCase("zeit"))
+		{
+			times.put(planTimeLoading.getID(), planTimeLoading);
+			// planTimeLoading.print();
+			planTimeLoading = null;
+		}
+	}
+
+	@Override
+	public void endPrefixMapping(String prefix) throws SAXException
+	{
+		// TODO Auto-generated method stub
+
+	}
+
+	private void endRoomElement(String localName)
+	{
+		if (localName.equalsIgnoreCase("kurz"))
+		{
+			roomLoading.setShortName(currentValue);
+		}
+		else if (localName.equalsIgnoreCase("lang"))
+		{
+			roomLoading.setLongName(currentValue);
+		}
+		else if (localName.equalsIgnoreCase("id"))
+		{
+			roomLoading.setID(Integer.valueOf(currentValue));
+		}
+		else if (localName.equalsIgnoreCase("raum"))
+		{
+			rooms.put(roomLoading.getID(), roomLoading);
+			// roomLoading.print();
+			roomLoading = null;
+		}
+	}
+
+	/**
+	 * @param id
+	 * @return
+	 */
+	public Day getDay(Integer id)
+	{
+		return days.get(id);
+	}
+
+	/**
+	 * @param id
+	 * @return
+	 */
+	public Employee getEmployee(Integer id)
+	{
+		return employees.get(id);
+	}
+
+	public Faculty getFaculty(Integer id)
+	{
+		return faculties.get(id);
+	}
+
+	/**
+	 * @param id
+	 * @return
+	 */
+	public Room getRoom(Integer id)
+	{
+		return rooms.get(id);
+	}
+
+	/**
+	 * @param id
+	 * @return
+	 */
+	public PlanTime getTime(Integer id)
+	{
+		return times.get(id);
+	}
+
+	@Override
+	public void ignorableWhitespace(char[] ch, int start, int length)
+			throws SAXException
+	{
+		// TODO Auto-generated method stub
+
 	}
 
 	public void load(Context context)
@@ -87,322 +551,6 @@ public class DataUtils implements ContentHandler
 		}
 	}
 
-	/**
-	 * @param d
-	 */
-	public void addDay(Day d)
-	{
-		days.put(d.getID(), d);
-	}
-
-	/**
-	 * @param id
-	 * @return
-	 */
-	public Day getDay(Integer id)
-	{
-		return days.get(id);
-	}
-
-	/**
-	 * @param t
-	 */
-	public void addTime(PlanTime t)
-	{
-		times.put(t.getID(), t);
-	}
-
-	/**
-	 * @param id
-	 * @return
-	 */
-	public PlanTime getTime(Integer id)
-	{
-		return times.get(id);
-	}
-
-	/**
-	 * @param r
-	 */
-	public void addRoom(Room r)
-	{
-		rooms.put(r.getID(), r);
-	}
-
-	/**
-	 * @param id
-	 * @return
-	 */
-	public Room getRoom(Integer id)
-	{
-		return rooms.get(id);
-	}
-
-	/**
-	 * @param e
-	 */
-	public void addEmployee(Employee e)
-	{
-		employees.put(e.getID(), e);
-	}
-
-	/**
-	 * @param id
-	 * @return
-	 */
-	public Employee getEmployee(Integer id)
-	{
-		return employees.get(id);
-	}
-
-	public void addFaculty(Faculty f)
-	{
-		faculties.put(f.getID(), f);
-	}
-
-	public Faculty getFaculty(Integer id)
-	{
-		return faculties.get(id);
-	}
-
-	private String		currentValue;
-
-	// Variables for Loading Stuff
-	private boolean		bLoadingDays;
-	private Day			dayLoading;
-
-	private boolean		bLoadingPlanTimes;
-	private PlanTime	planTimeLoading;
-
-	private boolean		bLoadingRooms;
-	private Room		roomLoading;
-
-	private boolean		bLoadingEmployees;
-	private Employee	employeeLoading;
-
-	private boolean		bLoadingLecutres;
-	private Lecture		lectureLoading;
-
-	@Override
-	public void characters(char[] ch, int start, int length)
-			throws SAXException
-	{
-		currentValue = new String(ch, start, length);
-
-	}
-
-	@Override
-	public void endDocument() throws SAXException
-	{
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void startElement(String uri, String localName, String qName,
-			Attributes atts) throws SAXException
-	{
-
-		if (localName.equalsIgnoreCase("erstellung"))
-		{
-			createInfo = new CreationInfo();
-		}
-		else if (localName.equalsIgnoreCase("tage"))
-		{
-			bLoadingDays = true;
-		}
-		else if (localName.equalsIgnoreCase("zeiten"))
-		{
-			bLoadingPlanTimes = true;
-		}
-		else if (localName.equalsIgnoreCase("raeume") && !bLoadingLecutres)
-		{
-			bLoadingRooms = true;
-		}
-		else if (localName.equalsIgnoreCase("mitarbeiter"))
-		{
-			bLoadingEmployees = true;
-		}
-		// Fachrichtung
-		else if (localName.equalsIgnoreCase("veranstaltungen"))
-		{
-			bLoadingLecutres = true;
-		}
-
-		if (bLoadingDays && localName.equalsIgnoreCase("tag"))
-		{
-			dayLoading = new Day();
-		}
-		else if (bLoadingPlanTimes && localName.equalsIgnoreCase("zeit"))
-		{
-			planTimeLoading = new PlanTime();
-		}
-		else if (bLoadingRooms && localName.equalsIgnoreCase("raum"))
-		{
-			roomLoading = new Room();
-		}
-		else if (bLoadingEmployees && localName.equalsIgnoreCase("person"))
-		{
-			employeeLoading = new Employee();
-		}
-		// Fachrichtung
-		else if (bLoadingLecutres
-				&& localName.equalsIgnoreCase("veranstaltung"))
-		{
-			lectureLoading = new Lecture();
-		}
-
-	}
-
-	private void endCreateInfoElement(String localName)
-	{
-		if (localName.equalsIgnoreCase("autor"))
-		{
-			createInfo.setAuthor(currentValue);
-		}
-		else if (localName.equalsIgnoreCase("version"))
-		{
-			createInfo.setVersion(currentValue);
-		}
-		else if (localName.equalsIgnoreCase("semestertyp"))
-		{
-			createInfo.setTermType(currentValue);
-		}
-	}
-
-	@Override
-	public void endElement(String uri, String localName, String qName)
-			throws SAXException
-	{
-
-		if (createInfo != null)
-		{
-			endCreateInfoElement(localName);
-		}
-
-		if (bLoadingDays)
-		{
-			if (dayLoading != null)
-			{
-				endDayElement(localName);
-			}
-			if (localName.equalsIgnoreCase("tage"))
-			{
-				bLoadingDays = false;
-			}
-		}
-		else if (bLoadingPlanTimes)
-		{
-			if (planTimeLoading != null)
-			{
-				endPlanTimeElement(localName);
-			}
-			if (localName.equalsIgnoreCase("zeiten"))
-			{
-				bLoadingPlanTimes = false;
-			}
-		}
-		else if (bLoadingRooms)
-		{
-			if (roomLoading != null)
-			{
-				endRoomElement(localName);
-			}
-			if (localName.equalsIgnoreCase("raeume"))
-			{
-				bLoadingRooms = false;
-			}
-		}
-
-	}
-
-	private void endRoomElement(String localName)
-	{
-		// try
-		// {
-		// Log.e("sleep", "1");
-		// Thread.sleep(10);
-		// }
-		// catch (InterruptedException e)
-		// {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-		if (localName.equalsIgnoreCase("kurz"))
-		{
-			roomLoading.setShortName(currentValue);
-		}
-		else if (localName.equalsIgnoreCase("lang"))
-		{
-			roomLoading.setLongName(currentValue);
-		}
-		else if (localName.equalsIgnoreCase("id"))
-		{
-			roomLoading.setID(Integer.valueOf(currentValue));
-		}
-		else if (localName.equalsIgnoreCase("raum"))
-		{
-			rooms.put(roomLoading.getID(), roomLoading);
-			roomLoading.print();
-			roomLoading = null;
-		}
-	}
-
-	private void endPlanTimeElement(String localName)
-	{
-		if (localName.equalsIgnoreCase("id"))
-		{
-			planTimeLoading.setID(Integer.valueOf(currentValue));
-		}
-		else if (localName.equalsIgnoreCase("bezeichnung"))
-		{
-			planTimeLoading.setDescription(currentValue);
-		}
-		else if (localName.equalsIgnoreCase("zeit"))
-		{
-			times.put(planTimeLoading.getID(), planTimeLoading);
-			// planTimeLoading.print();
-			planTimeLoading = null;
-		}
-	}
-
-	private void endDayElement(String localName)
-	{
-		if (localName.equalsIgnoreCase("kurz"))
-		{
-			dayLoading.setShortName(currentValue);
-		}
-		else if (localName.equalsIgnoreCase("lang"))
-		{
-			dayLoading.setLongName(currentValue);
-		}
-		else if (localName.equalsIgnoreCase("id"))
-		{
-			dayLoading.setID(Integer.valueOf(currentValue));
-		}
-		else if (localName.equalsIgnoreCase("tag"))
-		{
-			days.put(dayLoading.getID(), dayLoading);
-			// dayLoading.print();
-			dayLoading = null;
-		}
-	}
-
-	@Override
-	public void endPrefixMapping(String prefix) throws SAXException
-	{
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void ignorableWhitespace(char[] ch, int start, int length)
-			throws SAXException
-	{
-		// TODO Auto-generated method stub
-
-	}
-
 	@Override
 	public void processingInstruction(String target, String data)
 			throws SAXException
@@ -429,6 +577,84 @@ public class DataUtils implements ContentHandler
 	public void startDocument() throws SAXException
 	{
 		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void startElement(String uri, String localName, String qName,
+			Attributes atts) throws SAXException
+	{
+
+		if (localName.equalsIgnoreCase("erstellung"))
+		{
+			createInfo = new CreationInfo();
+		}
+		else if (localName.equalsIgnoreCase("tage"))
+		{
+			bLoadingDays = true;
+		}
+		else if (localName.equalsIgnoreCase("zeiten"))
+		{
+			bLoadingPlanTimes = true;
+		}
+		else if (localName.equalsIgnoreCase("raeume") && !bLoadingLecutres)
+		{
+			bLoadingRooms = true;
+		}
+		else if (localName.equalsIgnoreCase("mitarbeiter") && !bLoadingLecutres)
+		{
+			bLoadingEmployees = true;
+		}
+		else if (localName.equalsIgnoreCase("fachrichtungen")
+				&& !bLoadingLecutres)
+		{
+			bLoadingFaculties = true;
+		}
+		else if (localName.equalsIgnoreCase("veranstaltungen"))
+		{
+			bLoadingLecutres = true;
+		}
+
+		if (bLoadingDays && localName.equalsIgnoreCase("tag"))
+		{
+			dayLoading = new Day();
+		}
+		else if (bLoadingPlanTimes && localName.equalsIgnoreCase("zeit"))
+		{
+			planTimeLoading = new PlanTime();
+		}
+		else if (bLoadingRooms && localName.equalsIgnoreCase("raum"))
+		{
+			roomLoading = new Room();
+		}
+		else if (bLoadingEmployees && localName.equalsIgnoreCase("person"))
+		{
+			employeeLoading = new Employee();
+		}
+		else if (bLoadingFaculties
+				&& localName.equalsIgnoreCase("fachrichtung"))
+		{
+			facultyLoading = new Faculty();
+		}
+		else if (bLoadingLecutres)
+		{
+			if (localName.equalsIgnoreCase("veranstaltung"))
+			{
+				lectureLoading = new Lecture();
+			}
+			else if (localName.equalsIgnoreCase("termine"))
+			{
+				bLoadingLectureDate = true;
+			}
+			else if (localName.equalsIgnoreCase("mitarbeiter"))
+			{
+				bLoadingLectureLecturer = true;
+			}
+			else if (localName.equalsIgnoreCase("fachrichtungen"))
+			{
+				bLoadingLectureFaculties = true;
+			}
+		}
 
 	}
 

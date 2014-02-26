@@ -146,7 +146,7 @@
 			<id>16</id>
 			<bezeichnung>
 				<kurz>SR2</kurz>
-				<lang>Seminarraum 2 (Hauptgebä;ude, Raum 103)</lang>
+				<lang>Seminarraum 2 (Hauptgebäude, Raum 103)</lang>
 			</bezeichnung>
 		</raum>
 		<raum>
@@ -160,7 +160,7 @@
 			<id>10</id>
 			<bezeichnung>
 				<kurz>SR8</kurz>
-				<lang>Seminarraum 8 (Hauptgebä;ude, Raum 212)</lang>
+				<lang>Seminarraum 8 (Hauptgebäude, Raum 212)</lang>
 			</bezeichnung>
 		</raum>
 		<raum>
@@ -392,7 +392,7 @@
 				<bezeichnung>
 					<kuerzel>hs</kuerzel>
 					<vorname>Andreas</vorname>
-					<nachname>Hä;uslein</nachname>
+					<nachname>Häuslein</nachname>
 					<teilnahme>1</teilnahme>
 				</bezeichnung>
 			</person>
@@ -1226,7 +1226,7 @@
 				<id>11</id>
 				<bezeichnung>
 					<kurz>KAI</kurz>
-					<lang>Kaufmä;nnischer Assistent</lang>
+					<lang>Kaufmännischer Assistent</lang>
 				</bezeichnung>
 				<semester>
 					<sem>1</sem>
@@ -4327,7 +4327,7 @@
 		<veranstaltung>
 			<id>90</id>
 			<parent></parent>
-			<bezeichnung>Führungskrä;ftetraining</bezeichnung>
+			<bezeichnung>Führungskräftetraining</bezeichnung>
 			<bez_zusatz></bez_zusatz>
 			<url></url>
 			<vverzeichnis>1</vverzeichnis>
@@ -4363,7 +4363,7 @@
 		<veranstaltung>
 			<id>91</id>
 			<parent></parent>
-			<bezeichnung>Führungskrä;ftetraining</bezeichnung>
+			<bezeichnung>Führungskräftetraining</bezeichnung>
 			<bez_zusatz></bez_zusatz>
 			<url></url>
 			<vverzeichnis>1</vverzeichnis>
@@ -7902,7 +7902,7 @@
 			<id>36</id>
 			<parent></parent>
 			<bezeichnung>Seminar</bezeichnung>
-			<bez_zusatz>(Nebenlä;ufige und verteilte Syst.)</bez_zusatz>
+			<bez_zusatz>(Nebenläufige und verteilte Syst.)</bez_zusatz>
 			<url></url>
 			<vverzeichnis>1</vverzeichnis>
 			<stunden>1</stunden>
@@ -8063,7 +8063,7 @@
 		<veranstaltung>
 			<id>28</id>
 			<parent></parent>
-			<bezeichnung>Softwarequalitä;t</bezeichnung>
+			<bezeichnung>Softwarequalität</bezeichnung>
 			<bez_zusatz></bez_zusatz>
 			<url></url>
 			<vverzeichnis>1</vverzeichnis>

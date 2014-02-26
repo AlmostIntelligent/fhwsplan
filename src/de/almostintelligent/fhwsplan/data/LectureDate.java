@@ -2,6 +2,8 @@ package de.almostintelligent.fhwsplan.data;
 
 import java.util.Vector;
 
+import android.util.Log;
+
 /**
  * @author Freddi
  * 
@@ -21,12 +23,22 @@ public class LectureDate
 		return day;
 	}
 
+	public void setDay(Day d)
+	{
+		day = d;
+	}
+
 	/**
 	 * @return the time
 	 */
 	public PlanTime getTime()
 	{
 		return time;
+	}
+
+	public void setTime(PlanTime t)
+	{
+		time = t;
 	}
 
 	/**
@@ -42,9 +54,15 @@ public class LectureDate
 		rooms.add(r);
 	}
 
-	public LectureDate(Day d, PlanTime p)
+	public void print()
 	{
-		day = d;
-		time = p;
+		Log.e("lecturedate.id", "..");
+		day.print();
+		time.print();
+		for (Room r : rooms)
+		{
+			r.print();
+		}
 	}
+
 }
