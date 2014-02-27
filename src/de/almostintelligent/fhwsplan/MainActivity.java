@@ -1,7 +1,7 @@
 package de.almostintelligent.fhwsplan;
 
 import de.almostintelligent.fhwsplan.data.DataUtils;
-import de.almostintelligent.fhwsplan.fragments.MyTimeTableFragment;
+import de.almostintelligent.fhwsplan.fragments.TimeTableDayFragment;
 import android.os.Bundle;
 import android.app.Activity;
 import android.support.v4.app.Fragment;
@@ -14,7 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class SPlanActivity extends android.support.v4.app.FragmentActivity
+public class MainActivity extends android.support.v4.app.FragmentActivity
 {
 	private String[]		mPlanetTitles;
 	private DrawerLayout	mDrawerLayout;
@@ -36,12 +36,12 @@ public class SPlanActivity extends android.support.v4.app.FragmentActivity
 	{
 		// Create a new fragment and specify the planet to show based on
 		// position
-		Fragment fragment = new MyTimeTableFragment();
+		Fragment fragment = new TimeTableDayFragment();
 		Bundle args = new Bundle();
 		fragment.setArguments(args);
 
 		// Insert the fragment by replacing any existing fragment
-		
+
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		fragmentManager.beginTransaction()
 				.replace(R.id.content_frame, fragment).commit();
@@ -61,8 +61,8 @@ public class SPlanActivity extends android.support.v4.app.FragmentActivity
 		DataUtils.get().load(this);
 
 		mPlanetTitles = new String[] {
-				getResources().getString(R.string.action_my_timetable),
-				"Test Page 2", "Test Page 3" };
+				getResources().getString(R.string.action_timetable_day),
+				getResources().getString(R.string.action_settings) };
 
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mDrawerList = (ListView) findViewById(R.id.left_drawer);

@@ -4,6 +4,13 @@
     <string name="app_name">FHW Splan</string>
     <string name="action_settings">Einstellungen</string>
     <string name="hello_world">Hallo Welt!</string>
-    <string name="action_my_timetable">Mein Stundenplan</string>
+    <string name="action_timetable_day">Tagesplan</string>
+    <string name="action_edit_timetable">Einstellungen</string>
+    <string name="settings_desc_style">Aussehen</string>
+    
+    <string-array name="style_selection">
+        <item>FH-Wedel</item>
+        <item>Farbenfroh</item>
+    </string-array>
 
 </resources>

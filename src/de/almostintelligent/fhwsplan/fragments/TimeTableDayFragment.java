@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class MyTimeTableFragment extends android.support.v4.app.Fragment
+public class TimeTableDayFragment extends android.support.v4.app.Fragment
 {
 	
 	@Override
