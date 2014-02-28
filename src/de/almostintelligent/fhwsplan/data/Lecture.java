@@ -5,10 +5,10 @@ import java.util.Vector;
 import android.util.Log;
 import android.util.SparseArray;
 
-public class Lecture
+public class Lecture extends DataWithID
 {
 
-	private Integer							iID;
+	
 	private Integer							iParent						= 0;
 	private String							strDescription;
 	private String							strDescAppendix;
@@ -19,19 +19,16 @@ public class Lecture
 	private Vector<LectureDate>				dates						= new Vector<LectureDate>();
 	private Vector<Employee>				lecturers					= new Vector<Employee>();
 	private SparseArray<Vector<Integer>>	facultySemesterInLecture	= new SparseArray<Vector<Integer>>();
-
-	/**
-	 * @return the iID
-	 */
-	public Integer getID()
+	
+	public boolean isOnDay(Day d)
 	{
-		return iID;
-	}
-
-	public void setID(Integer id)
-	{
-		iID = id;
-		// Log.e("lecture.id", iID.toString());
+		for (LectureDate ld: dates)
+		{
+			if (ld.getDay().getID() == d.getID())
+				return true;
+		}
+		
+		return false;
 	}
 
 	/**
@@ -135,10 +132,20 @@ public class Lecture
 			facultySemesterInLecture.get(f.getID()).add(s);
 		}
 	}
+	
+	public boolean matchesFacultyAndSemester(Faculty f, Integer s)
+	{
+		if (facultySemesterInLecture.get(f.getID()) != null)
+		{
+			if (facultySemesterInLecture.get(f.getID()).contains(s))
+				return true;
+		}
+		return false;
+	}
 
 	public void print()
 	{
-		Log.e("lecture", iID.toString() + ": " + strDescription
+		Log.e("lecture", getID().toString() + ": " + strDescription
 				+ (strDescAppendix != "" ? "" : " (" + strDescAppendix + ")"));
 		for (Employee e : lecturers)
 		{

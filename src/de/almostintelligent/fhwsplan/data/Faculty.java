@@ -4,9 +4,8 @@ import java.util.Vector;
 
 import android.util.Log;
 
-public class Faculty
+public class Faculty extends DataWithID
 {
-	private Integer			iID;
 	private String			strShortName;
 	private String			strLongName;
 	private Vector<Integer>	semester	= new Vector<Integer>();
@@ -50,19 +49,9 @@ public class Faculty
 		semester.add(i);
 	}
 
-	public Integer getID()
-	{
-		return iID;
-	}
-
-	public void setID(Integer id)
-	{
-		iID = id;
-	}
-
 	public void print()
 	{
-		Log.e("faculty.id", iID.toString());
+		Log.e("faculty.id", getID().toString());
 		Log.e("faculty.short", strShortName);
 		Log.e("faculty.long", strLongName);
 		for (Integer i : semester)

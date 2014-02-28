@@ -2,24 +2,12 @@ package de.almostintelligent.fhwsplan.data;
 
 import android.util.Log;
 
-public class Day
+public class Day extends DataWithID
 {
 
 	// Members
-	private Integer	iID;
 	private String	strShortName;
 	private String	strLongName;
-
-	// Getter
-	public Integer getID()
-	{
-		return iID;
-	}
-
-	public void setID(Integer id)
-	{
-		iID = id;
-	}
 
 	public String getShortName()
 	{
@@ -43,7 +31,7 @@ public class Day
 
 	public void print()
 	{
-		Log.e("day.id", iID.toString());
+		Log.e("day.id", getID().toString());
 		Log.e("day.short", strShortName);
 		Log.e("day.long", strLongName);
 	}

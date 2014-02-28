@@ -2,29 +2,14 @@ package de.almostintelligent.fhwsplan.data;
 
 import android.util.Log;
 
-public class Employee
+public class Employee extends DataWithID
 {
 
-	private Integer	iID;
 	private String	strToken;
 	private String	strPrename;
 	private String	strSurname;
 
-	/**
-	 * @return the iID
-	 */
-	public Integer getID()
-	{
-		return iID;
-	}
 
-	/**
-	 * @param id
-	 */
-	public void setID(Integer id)
-	{
-		iID = id;
-	}
 
 	/**
 	 * @return the token
@@ -76,7 +61,7 @@ public class Employee
 
 	public void print()
 	{
-		Log.e("employee.id", iID.toString());
+		Log.e("employee.id", getID().toString());
 		Log.e("employee.token", strToken);
 		Log.e("employee.prename", strPrename);
 		Log.e("employee.surname", strSurname);

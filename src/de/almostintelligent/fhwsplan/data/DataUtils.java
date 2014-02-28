@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.util.Calendar;
+import java.util.Vector;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
@@ -63,6 +65,36 @@ public class DataUtils implements ContentHandler
 
 	private DataUtils()
 	{
+	}
+
+	public Vector<Lecture> getLecturesByDay(Day d, Faculty f, Integer semester)
+	{
+		Vector<Lecture> result = new Vector<Lecture>();
+		
+		for (int i = 0; i < lectures.size(); ++i)
+		{
+			Integer iKey = lectures.keyAt(i);
+			Lecture l = lectures.get(iKey);
+			if (l.isOnDay(d))
+			{
+				if (l.matchesFacultyAndSemester(f, semester))
+					result.add(l);
+			}
+		}
+		
+		return result;
+	}
+	
+	private SparseArray<Lecture> getLectures()
+	{
+		return lectures;
+	}
+
+	public Day getToday()
+	{
+		Calendar now = Calendar.getInstance();
+		int iDay = now.get(Calendar.DAY_OF_WEEK);
+		return days.get(iDay - 1);
 	}
 
 	/**

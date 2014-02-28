@@ -3,7 +3,6 @@ package de.almostintelligent.fhwsplan;
 import de.almostintelligent.fhwsplan.data.DataUtils;
 import de.almostintelligent.fhwsplan.fragments.TimeTableDayFragment;
 import android.os.Bundle;
-import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
