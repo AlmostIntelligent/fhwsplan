@@ -1,7 +1,9 @@
 package de.almostintelligent.fhwsplan;
 
 import de.almostintelligent.fhwsplan.data.DataUtils;
+import de.almostintelligent.fhwsplan.filters.TimeTableFilter;
 import de.almostintelligent.fhwsplan.fragments.TimeTableDayFragment;
+import de.almostintelligent.fhwsplan.timetable.TimeTable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -58,6 +60,11 @@ public class MainActivity extends android.support.v4.app.FragmentActivity
 		setContentView(R.layout.activity_splan);
 
 		DataUtils.get().load(this);
+		TimeTableFilter filter = new TimeTableFilter();
+		filter.includeFaculty(DataUtils.get().getFaculty(12));
+//		filter.includeDay(DataUtils.get().getDay(1));
+		TimeTable table = TimeTable.createFromFilter(filter);
+		table.print();
 
 		mPlanetTitles = new String[] {
 				getResources().getString(R.string.action_timetable_day),

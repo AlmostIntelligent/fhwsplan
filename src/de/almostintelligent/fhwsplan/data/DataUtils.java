@@ -85,7 +85,7 @@ public class DataUtils implements ContentHandler
 		return result;
 	}
 	
-	private SparseArray<Lecture> getLectures()
+	public SparseArray<Lecture> getLectures()
 	{
 		return lectures;
 	}

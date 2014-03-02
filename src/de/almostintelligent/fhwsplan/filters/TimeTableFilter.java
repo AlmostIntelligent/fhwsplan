@@ -2,6 +2,7 @@ package de.almostintelligent.fhwsplan.filters;
 
 import java.util.Vector;
 
+import android.util.Log;
 import android.util.SparseArray;
 
 import de.almostintelligent.fhwsplan.data.DataWithID;
@@ -22,8 +23,8 @@ public class TimeTableFilter
 	private SparseArray<Employee>	_includeLecturer	= new SparseArray<Employee>();
 	private SparseArray<Employee>	_excludeLecturer	= new SparseArray<Employee>();
 
-	private SparseArray<Day>		_includeDay			= new SparseArray<Day>();
-	private SparseArray<Day>		_excludeDay			= new SparseArray<Day>();
+	// private SparseArray<Day> _includeDay = new SparseArray<Day>();
+	// private SparseArray<Day> _excludeDay			= new SparseArray<Day>();
 
 	/**
 	 * @param o
@@ -54,7 +55,7 @@ public class TimeTableFilter
 	{
 		boolean bInclude = contains(o, _includeLectures);
 		boolean bExclude = contains(o, _excludeLectures);
-		return (!bInclude && !bExclude) || (bInclude && !bExclude);
+		return /* (!bInclude && !bExclude) || */(bInclude && !bExclude);
 	}
 
 	public void includeLecture(Lecture l)
@@ -99,18 +100,19 @@ public class TimeTableFilter
 		checkInsert(e, _includeLecturer, _excludeLecturer);
 	}
 
-	public void includeDay(Day d)
-	{
-		checkInsert(d, _excludeDay, _includeDay);
-	}
-
-	private void excludeDay(Day d)
-	{
-		checkInsert(d, _includeDay, _excludeDay);
-	}
+//	public void includeDay(Day d)
+//	{
+//		checkInsert(d, _excludeDay, _includeDay);
+//	}
+//
+//	private void excludeDay(Day d)
+//	{
+//		checkInsert(d, _includeDay, _excludeDay);
+//	}
 
 	public SparseArray<Lecture> apply(SparseArray<Lecture> lectures)
 	{
+		Log.e("timetablefilter", "apply");
 		SparseArray<Lecture> result = new SparseArray<Lecture>();
 
 		for (int i = 0; i < lectures.size(); ++i)
