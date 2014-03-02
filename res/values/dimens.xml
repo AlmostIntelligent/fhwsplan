@@ -5,5 +5,6 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="drawer_menu_text_size">13dp</dimen>
     <dimen name="drawer_menu_item_height">60dp</dimen>
+    <dimen name="timetable_item_appendix_font_size">11dp</dimen>
     
 </resources>
