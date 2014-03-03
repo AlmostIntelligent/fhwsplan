@@ -1,6 +1,8 @@
 package de.almostintelligent.fhwsplan;
 
 import de.almostintelligent.fhwsplan.data.DataUtils;
+import de.almostintelligent.fhwsplan.data.Day;
+import de.almostintelligent.fhwsplan.data.Faculty;
 import de.almostintelligent.fhwsplan.filters.TimeTableFilter;
 import de.almostintelligent.fhwsplan.fragments.TimeTableDayFragment;
 import de.almostintelligent.fhwsplan.timetable.TimeTable;
@@ -60,9 +62,16 @@ public class MainActivity extends android.support.v4.app.FragmentActivity
 		setContentView(R.layout.activity_splan);
 
 		DataUtils.get().load(this);
-		TimeTableFilter filter = new TimeTableFilter();
-		filter.includeFaculty(DataUtils.get().getFaculty(12));
-//		filter.includeDay(DataUtils.get().getDay(1));
+
+		TimeTableFilter filter = new TimeTableFilter(DataUtils.get()
+				.getLectures());
+
+		Faculty f = DataUtils.get().getFaculty(13);
+		Log.e("faculty.name", f.getLongName());
+		filter.whereFacultyAndSemester(f, 1);
+		Day d = DataUtils.get().getDay(1);
+		filter.whereDay(d);
+
 		TimeTable table = TimeTable.createFromFilter(filter);
 		table.print();
 

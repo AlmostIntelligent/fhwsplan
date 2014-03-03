@@ -70,7 +70,7 @@ public class DataUtils implements ContentHandler
 	public Vector<Lecture> getLecturesByDay(Day d, Faculty f, Integer semester)
 	{
 		Vector<Lecture> result = new Vector<Lecture>();
-		
+
 		for (int i = 0; i < lectures.size(); ++i)
 		{
 			Integer iKey = lectures.keyAt(i);
@@ -81,10 +81,10 @@ public class DataUtils implements ContentHandler
 					result.add(l);
 			}
 		}
-		
+
 		return result;
 	}
-	
+
 	public SparseArray<Lecture> getLectures()
 	{
 		return lectures;
@@ -138,7 +138,7 @@ public class DataUtils implements ContentHandler
 	public void characters(char[] ch, int start, int length)
 			throws SAXException
 	{
-		currentValue = new String(ch, start, length);
+		currentValue = new String(ch, start, length).trim();
 
 	}
 
@@ -175,7 +175,6 @@ public class DataUtils implements ContentHandler
 		else if (localName.equalsIgnoreCase("tag"))
 		{
 			days.put(dayLoading.getID(), dayLoading);
-			// dayLoading.print();
 			dayLoading = null;
 		}
 	}
@@ -288,7 +287,6 @@ public class DataUtils implements ContentHandler
 		else if (localName.equalsIgnoreCase("termin"))
 		{
 			lectureLoading.addDate(lectureDateLoading);
-			// lectureDateLoading.print();
 			lectureDateLoading = null;
 		}
 	}
@@ -362,7 +360,6 @@ public class DataUtils implements ContentHandler
 			}
 			catch (java.lang.NumberFormatException e)
 			{
-				// e.printStackTrace();
 				lectureLoading.setParent(0);
 			}
 		}
@@ -378,14 +375,9 @@ public class DataUtils implements ContentHandler
 		{
 			lectureLoading.setDescAppendix(currentValue);
 		}
-		else if (bLoadingLectureDate && localName.equalsIgnoreCase("termin"))
-		{
-			lectureDateLoading = new LectureDate();
-		}
 		else if (localName.equalsIgnoreCase("veranstaltung"))
 		{
 			lectures.put(lectureLoading.getID(), lectureLoading);
-			// lectureLoading.print();
 			lectureLoading = null;
 		}
 	}
@@ -411,7 +403,6 @@ public class DataUtils implements ContentHandler
 		else if (localName.equalsIgnoreCase("fachrichtung"))
 		{
 			faculties.put(facultyLoading.getID(), facultyLoading);
-			// facultyLoading.print();
 			facultyLoading = null;
 		}
 	}
@@ -438,7 +429,6 @@ public class DataUtils implements ContentHandler
 		else if (localName.equalsIgnoreCase("person"))
 		{
 			employees.put(employeeLoading.getID(), employeeLoading);
-			// employeeLoading.print();
 			employeeLoading = null;
 		}
 	}
@@ -456,7 +446,6 @@ public class DataUtils implements ContentHandler
 		else if (localName.equalsIgnoreCase("zeit"))
 		{
 			times.put(planTimeLoading.getID(), planTimeLoading);
-			// planTimeLoading.print();
 			planTimeLoading = null;
 		}
 	}
@@ -485,7 +474,6 @@ public class DataUtils implements ContentHandler
 		else if (localName.equalsIgnoreCase("raum"))
 		{
 			rooms.put(roomLoading.getID(), roomLoading);
-			// roomLoading.print();
 			roomLoading = null;
 		}
 	}
@@ -581,6 +569,7 @@ public class DataUtils implements ContentHandler
 			Log.e("DataUtils", "IOException");
 			e.printStackTrace();
 		}
+
 	}
 
 	@Override
@@ -677,6 +666,11 @@ public class DataUtils implements ContentHandler
 			else if (localName.equalsIgnoreCase("termine"))
 			{
 				bLoadingLectureDate = true;
+			}
+			else if (bLoadingLectureDate
+					&& localName.equalsIgnoreCase("termin"))
+			{
+				lectureDateLoading = new LectureDate();
 			}
 			else if (localName.equalsIgnoreCase("mitarbeiter"))
 			{

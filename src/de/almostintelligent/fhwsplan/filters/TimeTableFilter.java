@@ -1,134 +1,167 @@
 package de.almostintelligent.fhwsplan.filters;
 
-import java.util.Vector;
+import java.util.HashSet;
 
 import android.util.Log;
 import android.util.SparseArray;
 
-import de.almostintelligent.fhwsplan.data.DataWithID;
 import de.almostintelligent.fhwsplan.data.Day;
-import de.almostintelligent.fhwsplan.data.Employee;
 import de.almostintelligent.fhwsplan.data.Faculty;
 import de.almostintelligent.fhwsplan.data.Lecture;
 
 public class TimeTableFilter
 {
 
-	private SparseArray<Lecture>	_includeLectures	= new SparseArray<Lecture>();
-	private SparseArray<Lecture>	_excludeLectures	= new SparseArray<Lecture>();
+	private SparseArray<Lecture>	_lectures	= new SparseArray<Lecture>();
 
-	private SparseArray<Faculty>	_includeFaculty		= new SparseArray<Faculty>();
-	private SparseArray<Faculty>	_excludeFaculty		= new SparseArray<Faculty>();
-
-	private SparseArray<Employee>	_includeLecturer	= new SparseArray<Employee>();
-	private SparseArray<Employee>	_excludeLecturer	= new SparseArray<Employee>();
-
-	// private SparseArray<Day> _includeDay = new SparseArray<Day>();
-	// private SparseArray<Day> _excludeDay			= new SparseArray<Day>();
-
-	/**
-	 * @param o
-	 *            Object to insert in Add
-	 * @param remove
-	 *            Object will be removed from this Vector (if vector contains
-	 *            it)
-	 * @param add
-	 *            Vector o will be added to
-	 */
-	private <T> void checkInsert(DataWithID o, SparseArray<T> remove,
-			SparseArray<T> add)
+	private SparseArray<Lecture> getLecturesCopy()
 	{
-		if (contains(o, remove))
-			remove.remove(o.getID());
+		SparseArray<Lecture> lectures = new SparseArray<Lecture>();
 
-		// if (o instanceof T)
-		add.put(o.getID(), (T) o);
+		for (int i = 0; i < _lectures.size(); ++i)
+		{
+			Integer iKey = _lectures.keyAt(i);
+			Lecture l = _lectures.get(iKey);
+			lectures.put(l.getID(), l);
+		}
+
+		return lectures;
 	}
 
-	private <T> boolean contains(DataWithID o, SparseArray<T> array)
+	public SparseArray<Lecture> getLectures()
 	{
-		return array.get(o.getID()) != null;
+		return _lectures;
 	}
 
-	public <T> boolean passesFilter(DataWithID o, SparseArray<T> incl,
-			SparseArray<T> excl)
+	public TimeTableFilter(SparseArray<Lecture> lectures)
 	{
-		boolean bInclude = contains(o, _includeLectures);
-		boolean bExclude = contains(o, _excludeLectures);
-		return /* (!bInclude && !bExclude) || */(bInclude && !bExclude);
-	}
-
-	public void includeLecture(Lecture l)
-	{
-		checkInsert(l, _excludeLectures, _includeLectures);
-		// if (excludeLectures.contains(l))
-		// excludeLectures.remove(l);
-		// includeLectures.add(l);
-	}
-
-	public void excludeLecture(Lecture l)
-	{
-		checkInsert(l, _includeLectures, _excludeLectures);
-		// if (includeLectures.contains(l))
-		// includeLectures.remove(l);
-		// excludeLectures.add(l);
-	}
-
-	public void includeFaculty(Faculty f)
-	{
-		checkInsert(f, _excludeFaculty, _includeFaculty);
-		// if (excludeFaculty.contains(f))
-		// excludeFaculty.remove(f);
-		// includeFaculty.add(f);
-	}
-
-	public void excludeFaculty(Faculty f)
-	{
-		checkInsert(f, _includeFaculty, _excludeFaculty);
-		// if (includeFaculty.contains(f))
-		// includeFaculty.remove(f);
-		// excludeFaculty.add(f);
-	}
-
-	public void includeEmployee(Employee e)
-	{
-		checkInsert(e, _excludeLecturer, _includeLecturer);
-	}
-
-	public void excludeEmployee(Employee e)
-	{
-		checkInsert(e, _includeLecturer, _excludeLecturer);
-	}
-
-//	public void includeDay(Day d)
-//	{
-//		checkInsert(d, _excludeDay, _includeDay);
-//	}
-//
-//	private void excludeDay(Day d)
-//	{
-//		checkInsert(d, _includeDay, _excludeDay);
-//	}
-
-	public SparseArray<Lecture> apply(SparseArray<Lecture> lectures)
-	{
-		Log.e("timetablefilter", "apply");
-		SparseArray<Lecture> result = new SparseArray<Lecture>();
-
 		for (int i = 0; i < lectures.size(); ++i)
 		{
 			Integer iKey = lectures.keyAt(i);
 			Lecture l = lectures.get(iKey);
+			_lectures.put(l.getID(), l);
+		}
+	}
 
-			if (passesFilter(l, _includeLectures, _excludeLectures)
-					|| passesFilter(l, _includeFaculty, _excludeFaculty)
-					|| passesFilter(l, _includeLecturer, _excludeLecturer))
+	public TimeTableFilter whereID(Integer id)
+	{
+		SparseArray<Lecture> lectures = getLecturesCopy();
+		for (int i = 0; i < lectures.size(); ++i)
+		{
+			Integer iKey = lectures.keyAt(i);
+			Lecture l = lectures.get(iKey);
+			if (l != null)
 			{
-				result.put(l.getID(), l);
+				if (l.getID() != id)
+				{
+					_lectures.remove(iKey);
+				}
 			}
 		}
+		return this;
+	}
 
-		return result;
+	public void printSize(String msg)
+	{
+		Log.e("TimeTableFilter.printsize", Integer.valueOf(_lectures.size())
+				.toString() + " Items: " + msg);
+	}
+
+	public TimeTableFilter whereIDs(HashSet<Integer> ids)
+	{
+		SparseArray<Lecture> lectures = getLecturesCopy();
+		for (int i = 0; i < lectures.size(); ++i)
+		{
+			Integer iKey = lectures.keyAt(i);
+			Lecture l = lectures.get(iKey);
+			if (l != null)
+			{
+				if (!ids.contains(l.getID()))
+				{
+					_lectures.remove(iKey);
+				}
+			}
+		}
+		return this;
+	}
+
+	public TimeTableFilter whereFaculty(Faculty f)
+	{
+		SparseArray<Lecture> lectures = getLecturesCopy();
+		for (int i = 0; i < lectures.size(); ++i)
+		{
+			Integer iKey = lectures.keyAt(i);
+			Lecture l = lectures.get(iKey);
+			if (l != null)
+			{
+				if (!l.isForFaculty(f))
+				{
+					_lectures.removeAt(i);
+				}
+
+			}
+
+		}
+
+		return this;
+	}
+	
+	public TimeTableFilter whereFacultyAndSemester(Faculty f, Integer s)
+	{
+		SparseArray<Lecture> lectures = getLecturesCopy();
+		for (int i = 0; i < lectures.size(); ++i)
+		{
+			Integer iKey = lectures.keyAt(i);
+			Lecture l = lectures.get(iKey);
+			if (l != null)
+			{
+				if (!l.matchesFacultyAndSemester(f, s))
+				{
+					_lectures.removeAt(i);
+				}
+
+			}
+
+		}
+
+		return this;
+	}
+
+	public TimeTableFilter whereSemester(Integer semester)
+	{
+		SparseArray<Lecture> lectures = getLecturesCopy();
+		for (int i = 0; i < lectures.size(); ++i)
+		{
+			Integer iKey = lectures.keyAt(i);
+			Lecture l = lectures.get(iKey);
+			if (l != null)
+			{
+				if (!l.hasSemester(semester))
+				{
+					_lectures.remove(iKey);
+				}
+			}
+		}
+		// printSize("whereSemester after");
+		return this;
+	}
+
+	public TimeTableFilter whereDay(Day d)
+	{
+		SparseArray<Lecture> lectures = getLecturesCopy();
+		for (int i = 0; i < lectures.size(); ++i)
+		{
+			Integer iKey = lectures.keyAt(i);
+			Lecture l = lectures.get(iKey);
+//			if (l != null)
+			{
+				if (!l.isOnDay(d))
+				{
+					_lectures.remove(iKey);
+				}
+			}
+		}
+		return this;
 	}
 
 }

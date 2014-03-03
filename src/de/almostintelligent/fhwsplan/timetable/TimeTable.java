@@ -2,8 +2,6 @@ package de.almostintelligent.fhwsplan.timetable;
 
 import android.util.Log;
 import android.util.SparseArray;
-import de.almostintelligent.fhwsplan.data.DataUtils;
-import de.almostintelligent.fhwsplan.data.Day;
 import de.almostintelligent.fhwsplan.data.Lecture;
 import de.almostintelligent.fhwsplan.filters.TimeTableFilter;
 
@@ -12,7 +10,7 @@ public class TimeTable
 
 	static public TimeTable createFromFilter(TimeTableFilter f)
 	{
-		return new TimeTable(f.apply(DataUtils.get().getLectures()));
+		return new TimeTable(f.getLectures());
 
 	}
 
@@ -23,13 +21,6 @@ public class TimeTable
 		_lectures = lectures;
 	}
 	
-	public SparseArray<Lecture> getLecturesByDay(Day d)
-	{
-		TimeTableFilter f = new TimeTableFilter();
-//		f.includeDay(d);
-		
-		return f.apply(_lectures);
-	}
 
 	public void print()
 	{
@@ -40,7 +31,7 @@ public class TimeTable
 			Lecture l = _lectures.get(iKey);
 			l.print();
 		}
-		
+		Log.e("timetable.entrycount", String.valueOf(_lectures.size()));
 	}
 
 }
