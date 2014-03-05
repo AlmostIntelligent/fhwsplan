@@ -3,6 +3,8 @@ package de.almostintelligent.fhwsplan;
 import de.almostintelligent.fhwsplan.data.DataUtils;
 import de.almostintelligent.fhwsplan.data.Day;
 import de.almostintelligent.fhwsplan.data.Faculty;
+import de.almostintelligent.fhwsplan.drawermenu.DrawerMenuAdapter;
+import de.almostintelligent.fhwsplan.drawermenu.DrawerMenuItem;
 import de.almostintelligent.fhwsplan.filters.TimeTableFilter;
 import de.almostintelligent.fhwsplan.fragments.TimeTableDayFragment;
 import de.almostintelligent.fhwsplan.timetable.TimeTable;
@@ -19,9 +21,9 @@ import android.widget.ListView;
 
 public class MainActivity extends android.support.v4.app.FragmentActivity
 {
-	private String[]		mPlanetTitles;
-	private DrawerLayout	mDrawerLayout;
-	private ListView		mDrawerList;
+	private DrawerMenuItem[]	mMenuEntries;
+	private DrawerLayout		mDrawerLayout;
+	private ListView			mDrawerList;
 
 	private class DrawerItemClickListener implements
 			ListView.OnItemClickListener
@@ -51,7 +53,7 @@ public class MainActivity extends android.support.v4.app.FragmentActivity
 
 		// Highlight the selected item, update the title, and close the drawer
 		mDrawerList.setItemChecked(position, true);
-		setTitle(mPlanetTitles[position]);
+		setTitle(mMenuEntries[position].getCaption());
 		mDrawerLayout.closeDrawer(mDrawerList);
 	}
 
@@ -67,7 +69,6 @@ public class MainActivity extends android.support.v4.app.FragmentActivity
 				.getLectures());
 
 		Faculty f = DataUtils.get().getFaculty(13);
-		Log.e("faculty.name", f.getLongName());
 		filter.whereFacultyAndSemester(f, 1);
 		Day d = DataUtils.get().getDay(1);
 		filter.whereDay(d);
@@ -75,9 +76,9 @@ public class MainActivity extends android.support.v4.app.FragmentActivity
 		TimeTable table = TimeTable.createFromFilter(filter);
 		table.print();
 
-		mPlanetTitles = new String[] {
-				getResources().getString(R.string.action_timetable_day),
-				getResources().getString(R.string.action_settings) };
+		mMenuEntries = new DrawerMenuItem[] {
+				new DrawerMenuItem(0, R.string.action_timetable_day, this),
+				new DrawerMenuItem(1, R.string.action_edit_timetable, this) };
 
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mDrawerList = (ListView) findViewById(R.id.left_drawer);
@@ -90,8 +91,8 @@ public class MainActivity extends android.support.v4.app.FragmentActivity
 		// Set the adapter for the list view
 		if (mDrawerList != null)
 		{
-			mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-					R.layout.drawer_list_item, mPlanetTitles));
+			mDrawerList
+					.setAdapter(new DrawerMenuAdapter(this, 0, mMenuEntries));
 
 			// Set the list's click listener
 			mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
