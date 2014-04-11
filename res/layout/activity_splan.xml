@@ -74,7 +74,7 @@
     </LinearLayout>
 
     <ScrollView
-        android:id="@+id/scrollView1"
+        android:id="@+id/svLectures"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="@dimen/timetable_day_selector_margin" >

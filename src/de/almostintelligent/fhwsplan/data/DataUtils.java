@@ -27,7 +27,7 @@ public class DataUtils implements ContentHandler
 	private static DataUtils	instance	= null;
 
 	public static DataUtils get()
-	{
+	{ 
 		if (instance == null)
 			instance = new DataUtils();
 		return instance;

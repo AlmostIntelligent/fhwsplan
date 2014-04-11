@@ -5,7 +5,7 @@ import java.util.Vector;
 import android.util.Log;
 import android.util.SparseArray;
 
-public class Lecture extends DataWithID
+public class Lecture extends DataWithID implements Comparable<Lecture>
 {
 
 	private Integer							iParent						= 0;
@@ -233,5 +233,11 @@ public class Lecture extends DataWithID
 	public void setDescAppendix(String appendix)
 	{
 		strDescAppendix = appendix;
+	}
+
+	@Override
+	public int compareTo(Lecture another)
+	{
+		return getLectureName().compareTo(another.getLectureName());
 	}
 }

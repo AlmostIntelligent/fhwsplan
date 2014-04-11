@@ -3,22 +3,22 @@ package de.almostintelligent.fhwsplan;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Vector;
 
+import de.almostintelligent.fhwsplan.config.SplanConfig;
 import de.almostintelligent.fhwsplan.data.DataUtils;
 import de.almostintelligent.fhwsplan.data.Day;
-import de.almostintelligent.fhwsplan.data.Faculty;
 import de.almostintelligent.fhwsplan.data.Lecture;
 import de.almostintelligent.fhwsplan.data.LectureDate;
-import de.almostintelligent.fhwsplan.data.sort.LectureSorting;
+import de.almostintelligent.fhwsplan.data.Room;
+import de.almostintelligent.fhwsplan.data.sort.LectureSortingDate;
 import de.almostintelligent.fhwsplan.filters.TimeTableFilter;
-import de.almostintelligent.fhwsplan.timetable.TimeTable;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -26,7 +26,9 @@ import android.widget.TextView;
 public class MainActivity extends Activity
 {
 
-	private TextView[]	txtDays;
+	private TextView[]			txtDays;
+	private HashSet<Integer>	setSelectedLectures;
+	private Integer				iSelectedDay	= -1;
 
 	public void onClickDayOfWeek(View v)
 	{
@@ -67,23 +69,16 @@ public class MainActivity extends Activity
 
 	private void buildTimeTable(int iDay)
 	{
+		iSelectedDay = iDay;
 		TimeTableFilter filter = new TimeTableFilter(DataUtils.get()
 				.getLectures());
 		// +1 because getDay searches by ID. Monday = 1 and not 0
 		Day day = DataUtils.get().getDay(iDay + 1);
 		filter.whereDay(day);
-		// HashSet<Integer> ids = new HashSet<Integer>();
-		// ids.add(79);
-		// ids.add(156);
-		// ids.add(18);
-		// ids.add(141);
-		// ids.add(142);
-		// ids.add(143);
-		// ids.add(145);
-		// ids.add(75);
-		// ids.add(86);
-		// ids.add(87);
-		// filter.whereIDs(ids);
+		//if (setSelectedLectures.size() != 0)
+		{
+			filter.whereIDs(setSelectedLectures);
+		}
 
 		SparseArray<Lecture> lectures = filter.getLectures();
 
@@ -93,7 +88,7 @@ public class MainActivity extends Activity
 
 		timeTableContainer.removeAllViews();
 
-		Vector<LectureSorting> listSort = new Vector<LectureSorting>();
+		Vector<LectureSortingDate> listSort = new Vector<LectureSortingDate>();
 
 		for (int i = 0; i < lectures.size(); ++i)
 		{
@@ -105,7 +100,7 @@ public class MainActivity extends Activity
 			{
 				if (d.getDay().getID() == day.getID())
 				{
-					LectureSorting s = new LectureSorting();
+					LectureSortingDate s = new LectureSortingDate();
 					s.lecture = l;
 					s.date = d;
 
@@ -116,7 +111,7 @@ public class MainActivity extends Activity
 
 		Collections.sort(listSort);
 
-		for (LectureSorting s : listSort)
+		for (LectureSortingDate s : listSort)
 		{
 			LinearLayout newItem = (LinearLayout) getLayoutInflater().inflate(
 					R.layout.timetableitem, null);
@@ -124,8 +119,14 @@ public class MainActivity extends Activity
 					s.lecture.getLectureName());
 			setTextViewTextByID(R.id.item_lecture_appendix, newItem,
 					s.lecture.getLectureAppendix());
-			setTextViewTextByID(R.id.item_lecture_room, newItem, s.date
-					.getRooms().firstElement().getShortName());
+
+			String strRooms = new String();
+			for (Room r : s.date.getRooms())
+			{
+				strRooms += r.getShortName() + " ";
+			}
+
+			setTextViewTextByID(R.id.item_lecture_room, newItem, strRooms);
 			setTextViewTextByID(R.id.item_lecture_time, newItem, s.date
 					.getTime().getDescription());
 
@@ -145,14 +146,35 @@ public class MainActivity extends Activity
 		}
 	}
 
+	private static final String	SELECTED_DAY_RESTORE	= "SELECTED_DAY_RESTORE";
+
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState)
+	{
+		super.onSaveInstanceState(savedInstanceState);
+
+		savedInstanceState.putInt(SELECTED_DAY_RESTORE, iSelectedDay);
+	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_splan);
 
-		Calendar c = Calendar.getInstance();
-		int iDay = c.get(Calendar.DAY_OF_WEEK) - 2;
+		if (savedInstanceState != null)
+		{
+			iSelectedDay = savedInstanceState.getInt(SELECTED_DAY_RESTORE);
+		}
+		else
+		{
+			Calendar c = Calendar.getInstance();
+			iSelectedDay = c.get(Calendar.DAY_OF_WEEK) - 2;
+		}
+
+		DataUtils.get().load(this);
+
+		setSelectedLectures = SplanConfig.LoadSelectedIDs(this);
 
 		txtDays = new TextView[5];
 
@@ -166,44 +188,68 @@ public class MainActivity extends Activity
 
 		highlightCurrentDay();
 
-		DataUtils.get().load(this);
+		buildTimeTable(iSelectedDay);
 
-		// TimeTableFilter filter = new TimeTableFilter(DataUtils.get()
-		// .getLectures());
-		//
-		// Faculty f = DataUtils.get().getFaculty(13);
-		// filter.whereFacultyAndSemester(f, 1);
-		// Day d = DataUtils.get().getDay(1);
-		// filter.whereDay(d);
+		setupActionBar();
 
-		buildTimeTable(iDay);
+	}
 
-		// TimeTable table = TimeTable.createFromFilter(filter);
-		// table.print();
+	/**
+	 * Set up the {@link android.app.ActionBar}.
+	 */
+	private void setupActionBar()
+	{
+
+		getActionBar().setDisplayHomeAsUpEnabled(false);
+
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
 		// Inflate the menu; this adds items to the action bar if it is present.
-		// getMenuInflater().inflate(R.menu.splan, menu);
+		getMenuInflater().inflate(R.menu.splan, menu);
 		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		switch (item.getItemId())
+		{
+		// case android.R.id.home:
+		// // This ID represents the Home or Up button. In the case of this
+		// // activity, the Up button is shown. Use NavUtils to allow users
+		// // to navigate up one level in the application structure. For
+		// // more details, see the Navigation pattern on Android Design:
+		// //
+		// //
+		// http://developer.android.com/design/patterns/navigation.html#up-vs-back
+		// //
+		// NavUtils.navigateUpFromSameTask(this);
+		// return true;
+			case R.id.action_edit_timetable:
+			{
+				Intent i = new Intent(this, SettingsActivity.class);
+				startActivity(i);
+				return true;
+			}
+		}
+
+		return super.onOptionsItemSelected(item);
 	}
 
 	private void highlightCurrentDay()
 	{
-		Calendar c = Calendar.getInstance();
-		int iDay = c.get(Calendar.DAY_OF_WEEK) - 2;
-
 		for (TextView txt : txtDays)
 		{
 			if (txt != null)
 				txt.setSelected(false);
 		}
 
-		if (txtDays[iDay] != null)
+		if (txtDays[iSelectedDay] != null)
 		{
-			txtDays[iDay].setSelected(true);
+			txtDays[iSelectedDay].setSelected(true);
 		}
 	}
 

@@ -6,8 +6,8 @@
     
     <dimen name="timetable_item_lecture_name_font_size">13dp</dimen>
     <dimen name="timetable_item_lecture_appendix_font_size">11dp</dimen>
-    <dimen name="timetable_item_lecture_time_font_size">12dp</dimen>
-    <dimen name="timetable_item_lecture_room_font_size">11dp</dimen>
+    <dimen name="timetable_item_lecture_time_font_size">11dp</dimen>
+    <dimen name="timetable_item_lecture_room_font_size">12dp</dimen>
     
     <dimen name="timetable_day_selector_margin">3dp</dimen>
     <dimen name="timetable_day_selector_size">50dp</dimen>
