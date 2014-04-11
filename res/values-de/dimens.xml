@@ -1,0 +1,9 @@
+<resources>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+
+    <dimen name="timetable_day_selector_margin">3dp</dimen>
+    <dimen name="timetable_day_selector_size">45dp</dimen>
+    <dimen name="timetable_day_selector_font_size">20dp</dimen>
+    
+</resources>

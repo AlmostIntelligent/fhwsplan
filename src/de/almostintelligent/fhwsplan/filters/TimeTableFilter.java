@@ -105,7 +105,7 @@ public class TimeTableFilter
 
 		return this;
 	}
-	
+
 	public TimeTableFilter whereFacultyAndSemester(Faculty f, Integer s)
 	{
 		SparseArray<Lecture> lectures = getLecturesCopy();
@@ -153,7 +153,7 @@ public class TimeTableFilter
 		{
 			Integer iKey = lectures.keyAt(i);
 			Lecture l = lectures.get(iKey);
-//			if (l != null)
+			// if (l != null)
 			{
 				if (!l.isOnDay(d))
 				{

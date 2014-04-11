@@ -17,9 +17,7 @@
         <Spinner
             android:id="@+id/spinner1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:entries="@array/style_selection"
-            android:prompt="@array/style_selection" />
+            android:layout_height="wrap_content" />
         
     </LinearLayout>
     

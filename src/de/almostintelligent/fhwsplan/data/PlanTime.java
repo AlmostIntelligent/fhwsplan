@@ -2,7 +2,7 @@ package de.almostintelligent.fhwsplan.data;
 
 import android.util.Log;
 
-public class PlanTime
+public class PlanTime implements Comparable<PlanTime>
 {
 
 	private Integer	iID;
@@ -39,6 +39,17 @@ public class PlanTime
 		Log.e("plantime.id", iID.toString());
 		Log.e("plantime.desc", strDescription);
 
+	}
+
+	@Override
+	public int compareTo(PlanTime another)
+	{
+		if (getID() < another.getID())
+			return -1;
+		if (getID() == another.getID())
+			return 0;
+		else
+			return 1;
 	}
 
 }

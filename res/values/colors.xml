@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="timetable_item_appendix">#aaa</color>
+    <color name="timetable_item_lecture_name">#222</color>
+    <color name="timetable_item_lecture_appendix">#aaa</color>
+    <color name="timetable_item_lecture_time">#333</color>
+    <color name="timetable_item_lecture_room">#bbb</color>
     
 </resources>

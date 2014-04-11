@@ -8,9 +8,10 @@
     <string name="action_edit_timetable">Einstellungen</string>
     <string name="settings_desc_style">Aussehen</string>
     
-    <string-array name="style_selection">
-        <item>FH-Wedel</item>
-        <item>Farbenfroh</item>
-    </string-array>
+    <string name="week_day_mon_short">Mo</string>
+    <string name="week_day_tue_short">Di</string>
+    <string name="week_day_wed_short">Mi</string>
+    <string name="week_day_thu_short">Do</string>
+    <string name="week_day_fri_short">Fr</string>
 
 </resources>

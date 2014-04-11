@@ -89,7 +89,7 @@ public class Lecture extends DataWithID
 	/**
 	 * @return the strDescription
 	 */
-	public String getDescription()
+	public String getLectureName()
 	{
 		return strDescription;
 	}
@@ -97,7 +97,7 @@ public class Lecture extends DataWithID
 	/**
 	 * @return the strDescAppendix
 	 */
-	public String getDescAppendix()
+	public String getLectureAppendix()
 	{
 		return strDescAppendix;
 	}
