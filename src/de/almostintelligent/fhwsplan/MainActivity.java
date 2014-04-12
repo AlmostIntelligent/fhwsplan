@@ -75,7 +75,7 @@ public class MainActivity extends Activity
 		// +1 because getDay searches by ID. Monday = 1 and not 0
 		Day day = DataUtils.get().getDay(iDay + 1);
 		filter.whereDay(day);
-		//if (setSelectedLectures.size() != 0)
+		// if (setSelectedLectures.size() != 0)
 		{
 			filter.whereIDs(setSelectedLectures);
 		}
@@ -169,7 +169,18 @@ public class MainActivity extends Activity
 		else
 		{
 			Calendar c = Calendar.getInstance();
-			iSelectedDay = c.get(Calendar.DAY_OF_WEEK) - 2;
+			//iSelectedDay = c.get(Calendar.DAY_OF_WEEK) - 2;
+			switch (c.get(Calendar.DAY_OF_WEEK))
+			{
+				case Calendar.SUNDAY:
+					iSelectedDay = 0;
+					break;
+				case Calendar.SATURDAY:
+					iSelectedDay = 0;
+					break;
+				default:
+					iSelectedDay = c.get(Calendar.DAY_OF_WEEK) - 2;
+			}
 		}
 
 		DataUtils.get().load(this);
@@ -252,5 +263,4 @@ public class MainActivity extends Activity
 			txtDays[iSelectedDay].setSelected(true);
 		}
 	}
-
 }
