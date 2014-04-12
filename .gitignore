@@ -1,7 +1,5 @@
 *.class
 bin/
 gen/
-.project
-.classpath
 design/
 *.psd
