@@ -16,6 +16,7 @@ import de.almostintelligent.fhwsplan.filters.TimeTableFilter;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -127,8 +128,22 @@ public class MainActivity extends Activity
 			}
 
 			setTextViewTextByID(R.id.item_lecture_room, newItem, strRooms);
-			setTextViewTextByID(R.id.item_lecture_time, newItem, s.date
-					.getTime().getDescription());
+			String strTime;
+			if (s.lecture.getDuration() > 1)
+			{
+				strTime = s.date.getTime().getStartTime() + " - ";
+				strTime += DataUtils
+						.get()
+						.getTime(
+								s.date.getTime().getID()
+										+ s.lecture.getDuration() - 1)
+						.getEndTime();
+			}
+			else
+			{
+				strTime = s.date.getTime().getTimeString();
+			}
+			setTextViewTextByID(R.id.item_lecture_time, newItem, strTime);
 
 			timeTableContainer.addView(newItem);
 		}
@@ -169,7 +184,7 @@ public class MainActivity extends Activity
 		else
 		{
 			Calendar c = Calendar.getInstance();
-			//iSelectedDay = c.get(Calendar.DAY_OF_WEEK) - 2;
+			// iSelectedDay = c.get(Calendar.DAY_OF_WEEK) - 2;
 			switch (c.get(Calendar.DAY_OF_WEEK))
 			{
 				case Calendar.SUNDAY:

@@ -1,12 +1,16 @@
 package de.almostintelligent.fhwsplan.data;
 
+import android.sax.StartElementListener;
 import android.util.Log;
 
 public class PlanTime// implements Comparable<PlanTime>
 {
 
-	private Integer	iID;
-	private String	strDescription;
+	private Integer	iID				= new Integer(0);
+	private String	strDescription	= new String();
+
+	private String	strStartTime	= new String();
+	private String	strEndTime		= new String();
 
 	// private Room room;
 
@@ -26,14 +30,37 @@ public class PlanTime// implements Comparable<PlanTime>
 	/**
 	 * @return the strDescription
 	 */
-	public String getDescription()
+	public String getTimeString()
 	{
 		return strDescription;
 	}
 
-	public void setDescription(String desc)
+	public void setTimeString(String desc)
 	{
 		strDescription = desc;
+		splitTimeString();
+	}
+
+	public String getStartTime()
+	{
+		return strStartTime;
+	}
+
+	public String getEndTime()
+	{
+		return strEndTime;
+	}
+
+	private void splitTimeString()
+	{
+		String strDesc = strDescription.replaceAll(" ", "");
+		String[] times = strDesc.split("-");
+
+		if (times.length == 2)
+		{
+			strStartTime = times[0];
+			strEndTime = times[1];
+		}
 	}
 
 	public void print()

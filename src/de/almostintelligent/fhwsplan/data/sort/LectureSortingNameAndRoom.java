@@ -7,7 +7,7 @@ public class LectureSortingNameAndRoom implements Comparable<LectureSortingNameA
 {
 
 	public Lecture lecture;
-	public LectureDate date;
+	//public LectureDate date;
 	
 	@Override
 	public int compareTo(LectureSortingNameAndRoom another)

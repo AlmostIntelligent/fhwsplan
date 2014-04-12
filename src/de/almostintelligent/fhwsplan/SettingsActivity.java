@@ -12,6 +12,7 @@ import de.almostintelligent.fhwsplan.data.LectureDate;
 import de.almostintelligent.fhwsplan.data.sort.LectureSortingNameAndRoom;
 import android.os.Bundle;
 import android.app.Activity;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -99,6 +100,7 @@ public class SettingsActivity extends Activity
 
 			LinearLayout newItem = (LinearLayout) getLayoutInflater().inflate(
 					R.layout.settings_timetableitem, null);
+
 			setTextViewTextByID(R.id.item_settings_lecture_name, newItem,
 					l.lecture.getLectureName());
 			setTextViewTextByID(R.id.item_settings_lecture_appendix, newItem,
@@ -122,28 +124,55 @@ public class SettingsActivity extends Activity
 			}
 
 			{
-				String strLecturers = new String();
+				StringBuilder strLecturers = new StringBuilder();
+				int i = 0, iLecturerCount = l.lecture.getLecturers().size();
 				for (Employee e : l.lecture.getLecturers())
 				{
-					strLecturers += e.getToken() + ", ";
+					strLecturers.append(e.getToken());
+					if (i != iLecturerCount - 1)
+						strLecturers.append(", ");
+					++i;
 				}
 
 				setTextViewTextByID(R.id.item_settings_lecture_lecturer,
-						newItem, strLecturers);
+						newItem, strLecturers.toString());
 
 			}
 
 			{
-				String strTimes = new String();
-				for (LectureDate d : l.lecture.getDates())
+				StringBuilder strTimes = new StringBuilder();
+				if (l.lecture.getDates().size() != 0)
 				{
-
-					strTimes += String.format("%s (%s), ", d.getDay()
-							.getShortName(), d.getTime().getDescription());
+					int i = 0, iDateCount = l.lecture.getDates().size();
+					for (LectureDate d : l.lecture.getDates())
+					{
+						String strTime;
+						if (l.lecture.getDuration() > 1)
+						{
+							strTime = d.getTime().getStartTime() + " - ";
+							strTime += DataUtils
+									.get()
+									.getTime(
+											d.getTime().getID()
+													+ l.lecture.getDuration()
+													- 1).getEndTime();
+						}
+						else
+						{
+							strTime = d.getTime().getTimeString();
+						}
+						strTimes.append(String.format("%s (%s)", d.getDay()
+								.getShortName(), strTime));
+						if (i != iDateCount - 1)
+							strTimes.append(", ");
+						++i;
+					}
 				}
+				else
+					strTimes.append("No Time");
 
 				setTextViewTextByID(R.id.item_settings_lecture_times, newItem,
-						strTimes);
+						strTimes.toString());
 			}
 
 			container.addView(newItem);

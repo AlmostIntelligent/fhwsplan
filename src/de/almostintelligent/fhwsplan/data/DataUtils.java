@@ -441,7 +441,7 @@ public class DataUtils implements ContentHandler
 		}
 		else if (localName.equalsIgnoreCase("bezeichnung"))
 		{
-			planTimeLoading.setDescription(currentValue);
+			planTimeLoading.setTimeString(currentValue);
 		}
 		else if (localName.equalsIgnoreCase("zeit"))
 		{
