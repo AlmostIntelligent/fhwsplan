@@ -70,7 +70,6 @@
             android:onClick="onClickDayOfWeek"
             android:text="@string/week_day_fri_short"
             android:textSize="@dimen/timetable_day_selector_font_size" />
-
     </LinearLayout>
 
     <ScrollView
@@ -85,9 +84,7 @@
             android:layout_height="wrap_content"
             android:dividerPadding="2dp"
             android:orientation="vertical" >
-
         </LinearLayout>
-
     </ScrollView>
 
 </LinearLayout>

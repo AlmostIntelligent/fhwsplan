@@ -16,7 +16,6 @@ import de.almostintelligent.fhwsplan.filters.TimeTableFilter;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -115,7 +114,7 @@ public class MainActivity extends Activity
 		for (LectureSortingDate s : listSort)
 		{
 			LinearLayout newItem = (LinearLayout) getLayoutInflater().inflate(
-					R.layout.timetableitem, null);
+					R.layout.timetable_item, null);
 			setTextViewTextByID(R.id.item_lecture_name, newItem,
 					s.lecture.getLectureName());
 			setTextViewTextByID(R.id.item_lecture_appendix, newItem,

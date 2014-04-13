@@ -12,12 +12,11 @@ import de.almostintelligent.fhwsplan.data.LectureDate;
 import de.almostintelligent.fhwsplan.data.sort.LectureSortingNameAndRoom;
 import android.os.Bundle;
 import android.app.Activity;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CheckBox;
+import android.widget.CheckBox; 
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.support.v4.app.NavUtils;
@@ -28,6 +27,7 @@ public class SettingsActivity extends Activity
 	HashSet<Integer>	setSelectedLectures	= new HashSet<Integer>();
 	Vector<CheckBox>	vecCheckboxes		= new Vector<CheckBox>();
 
+	
 	public void onSelectLecture(View v)
 	{
 		CheckBox cb = (CheckBox) v;
