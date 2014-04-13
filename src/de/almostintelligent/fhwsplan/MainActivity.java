@@ -1,166 +1,25 @@
 package de.almostintelligent.fhwsplan;
 
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Vector;
 
-import de.almostintelligent.fhwsplan.config.SplanConfig;
+import com.example.android.common.view.SlidingTabLayout;
+
+import de.almostintelligent.fhwsplan.adapters.TimeTableDaysFragmentPagerAdapter;
 import de.almostintelligent.fhwsplan.data.DataUtils;
-import de.almostintelligent.fhwsplan.data.Day;
-import de.almostintelligent.fhwsplan.data.Lecture;
-import de.almostintelligent.fhwsplan.data.LectureDate;
-import de.almostintelligent.fhwsplan.data.Room;
-import de.almostintelligent.fhwsplan.data.sort.LectureSortingDate;
-import de.almostintelligent.fhwsplan.filters.TimeTableFilter;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.SparseArray;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
-public class MainActivity extends Activity
+public class MainActivity extends FragmentActivity
 {
+	private Integer						iSelectedDay			= -1;
+	private ViewPager					vpDayPager;
+	TimeTableDaysFragmentPagerAdapter	fpaDays;
 
-	private TextView[]			txtDays;
-	private HashSet<Integer>	setSelectedLectures;
-	private Integer				iSelectedDay	= -1;
-
-	public void onClickDayOfWeek(View v)
-	{
-		for (TextView txt : txtDays)
-		{
-			txt.setSelected(false);
-		}
-
-		TextView txt = (TextView) v;
-		if (txt != null)
-		{
-			txt.setSelected(true);
-		}
-
-		if (v.getId() == R.id.txtMonday)
-		{
-			buildTimeTable(0);
-		}
-		else if (v.getId() == R.id.txtTuesday)
-		{
-			buildTimeTable(1);
-		}
-		else if (v.getId() == R.id.txtWednesday)
-		{
-			buildTimeTable(2);
-		}
-		else if (v.getId() == R.id.txtThursday)
-		{
-			buildTimeTable(3);
-		}
-		else if (v.getId() == R.id.txtFriday)
-		{
-			buildTimeTable(4);
-		}
-		else
-			buildTimeTable(4);
-	}
-
-	private void buildTimeTable(int iDay)
-	{
-		iSelectedDay = iDay;
-		TimeTableFilter filter = new TimeTableFilter(DataUtils.get()
-				.getLectures());
-		// +1 because getDay searches by ID. Monday = 1 and not 0
-		Day day = DataUtils.get().getDay(iDay + 1);
-		filter.whereDay(day);
-		// if (setSelectedLectures.size() != 0)
-		{
-			filter.whereIDs(setSelectedLectures);
-		}
-
-		SparseArray<Lecture> lectures = filter.getLectures();
-
-		LinearLayout timeTableContainer = (LinearLayout) findViewById(R.id.TimeTableContainer);
-		if (timeTableContainer == null)
-			return;
-
-		timeTableContainer.removeAllViews();
-
-		Vector<LectureSortingDate> listSort = new Vector<LectureSortingDate>();
-
-		for (int i = 0; i < lectures.size(); ++i)
-		{
-			Integer iKey = lectures.keyAt(i);
-			Lecture l = lectures.get(iKey);
-			Vector<LectureDate> dates = l.getDates();
-
-			for (LectureDate d : dates)
-			{
-				if (d.getDay().getID() == day.getID())
-				{
-					LectureSortingDate s = new LectureSortingDate();
-					s.lecture = l;
-					s.date = d;
-
-					listSort.add(s);
-				}
-			}
-		}
-
-		Collections.sort(listSort);
-
-		for (LectureSortingDate s : listSort)
-		{
-			LinearLayout newItem = (LinearLayout) getLayoutInflater().inflate(
-					R.layout.timetable_item, null);
-			setTextViewTextByID(R.id.item_lecture_name, newItem,
-					s.lecture.getLectureName());
-			setTextViewTextByID(R.id.item_lecture_appendix, newItem,
-					s.lecture.getLectureAppendix());
-
-			String strRooms = new String();
-			for (Room r : s.date.getRooms())
-			{
-				strRooms += r.getShortName() + " ";
-			}
-
-			setTextViewTextByID(R.id.item_lecture_room, newItem, strRooms);
-			String strTime;
-			if (s.lecture.getDuration() > 1)
-			{
-				strTime = s.date.getTime().getStartTime() + " - ";
-				strTime += DataUtils
-						.get()
-						.getTime(
-								s.date.getTime().getID()
-										+ s.lecture.getDuration() - 1)
-						.getEndTime();
-			}
-			else
-			{
-				strTime = s.date.getTime().getTimeString();
-			}
-			setTextViewTextByID(R.id.item_lecture_time, newItem, strTime);
-
-			timeTableContainer.addView(newItem);
-		}
-
-	}
-
-	private void setTextViewTextByID(int resID, View parent, String caption)
-	{
-		if (parent == null)
-			return;
-		TextView txt = (TextView) parent.findViewById(resID);
-		if (txt != null)
-		{
-			txt.setText(caption);
-		}
-	}
-
-	private static final String	SELECTED_DAY_RESTORE	= "SELECTED_DAY_RESTORE";
+	private static final String			SELECTED_DAY_RESTORE	= "SELECTED_DAY_RESTORE";
 
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState)
@@ -174,6 +33,9 @@ public class MainActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+
+		setupActionBar();
+
 		setContentView(R.layout.activity_splan);
 
 		if (savedInstanceState != null)
@@ -197,25 +59,38 @@ public class MainActivity extends Activity
 			}
 		}
 
+		vpDayPager = (ViewPager) findViewById(R.id.timetable_days_pager);
+		if (vpDayPager != null)
+		{
+			fpaDays = new TimeTableDaysFragmentPagerAdapter(
+					getSupportFragmentManager());
+
+			String[] dayStrings = new String[5];
+			dayStrings[0] = getResources().getString(
+					R.string.week_day_mon_long);
+			dayStrings[1] = getResources().getString(
+					R.string.week_day_tue_long);
+			dayStrings[2] = getResources().getString(
+					R.string.week_day_wed_long);
+			dayStrings[3] = getResources().getString(
+					R.string.week_day_thu_long);
+			dayStrings[4] = getResources().getString(
+					R.string.week_day_fri_long);
+
+			fpaDays.setDayString(dayStrings);
+
+			vpDayPager.setAdapter(fpaDays);
+
+			SlidingTabLayout stl = (SlidingTabLayout) findViewById(R.id.timetable_pager_title_strip);
+			if (stl != null)
+			{
+				stl.setViewPager(vpDayPager);
+			}
+
+			vpDayPager.setCurrentItem(iSelectedDay);
+		}
+
 		DataUtils.get().load(this);
-
-		setSelectedLectures = SplanConfig.LoadSelectedIDs(this);
-
-		txtDays = new TextView[5];
-
-		// -2 because Monday should be the first Day in the Week and in the
-		// array.
-		txtDays[Calendar.MONDAY - 2] = (TextView) findViewById(R.id.txtMonday);
-		txtDays[Calendar.TUESDAY - 2] = (TextView) findViewById(R.id.txtTuesday);
-		txtDays[Calendar.WEDNESDAY - 2] = (TextView) findViewById(R.id.txtWednesday);
-		txtDays[Calendar.THURSDAY - 2] = (TextView) findViewById(R.id.txtThursday);
-		txtDays[Calendar.FRIDAY - 2] = (TextView) findViewById(R.id.txtFriday);
-
-		highlightCurrentDay();
-
-		buildTimeTable(iSelectedDay);
-
-		setupActionBar();
 
 	}
 
@@ -262,19 +137,5 @@ public class MainActivity extends Activity
 		}
 
 		return super.onOptionsItemSelected(item);
-	}
-
-	private void highlightCurrentDay()
-	{
-		for (TextView txt : txtDays)
-		{
-			if (txt != null)
-				txt.setSelected(false);
-		}
-
-		if (txtDays[iSelectedDay] != null)
-		{
-			txtDays[iSelectedDay].setSelected(true);
-		}
 	}
 }

@@ -11,8 +11,12 @@
     <string name="week_day_wed_short">Wed</string>
     <string name="week_day_thu_short">Thu</string>
     <string name="week_day_fri_short">Fri</string>
+    <string name="week_day_mon_long">Monday</string>
+    <string name="week_day_tue_long">Tuesday</string>
+    <string name="week_day_wed_long">Wednesday</string>
+    <string name="week_day_thu_long">Thusday</string>
+    <string name="week_day_fri_long">Friday</string>
     <string name="title_activity_settings">Select Lectures</string>
-    
     <string name="button_save">Save</string>
 
 </resources>

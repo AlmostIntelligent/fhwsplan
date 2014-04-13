@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/svLectures"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/timetable_day_selector_margin" >
+
+    <LinearLayout
+        android:id="@+id/TimeTableContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ddd"
+        android:dividerPadding="2dp"
+        android:orientation="vertical" >
+    </LinearLayout>
+
+</ScrollView>

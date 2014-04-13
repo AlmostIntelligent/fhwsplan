@@ -7,15 +7,17 @@
     <string name="action_edit_timetable">Vorlesungen einstellen</string>
     <string name="settings_desc_style">Aussehen</string>
     <string name="settings_deselect_all_lectures">Alle abwählen</string>
-    
     <string name="title_activity_settings">Vorlesungen</string>
-    
     <string name="week_day_mon_short">Mo</string>
     <string name="week_day_tue_short">Di</string>
     <string name="week_day_wed_short">Mi</string>
     <string name="week_day_thu_short">Do</string>
     <string name="week_day_fri_short">Fr</string>
-    
+    <string name="week_day_mon_long">Montag</string>
+    <string name="week_day_tue_long">Dienstag</string>
+    <string name="week_day_wed_long">Mittwoch</string>
+    <string name="week_day_thu_long">Donnerstag</string>
+    <string name="week_day_fri_long">Freitag</string>
     <string name="button_save">Speichern</string>
 
 </resources>
