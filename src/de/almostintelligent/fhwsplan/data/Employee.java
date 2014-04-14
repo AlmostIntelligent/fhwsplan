@@ -2,14 +2,22 @@ package de.almostintelligent.fhwsplan.data;
 
 import android.util.Log;
 
-public class Employee extends DataWithID
+public class Employee extends DataWithID implements Comparable<Employee>
 {
 
-	private String	strToken;
-	private String	strPrename;
-	private String	strSurname;
+	private String	strToken	= new String();
+	private String	strPrename	= new String();
+	private String	strSurname	= new String();
 
-
+	public String getNameFormated()
+	{
+		if (strToken.equals("") && strSurname.equals(""))
+		{
+			return getPrename();
+		}
+		return String.format("%s %s (%s)", getPrename(), getSurname(),
+				getToken());
+	}
 
 	/**
 	 * @return the token
@@ -18,9 +26,10 @@ public class Employee extends DataWithID
 	{
 		return strToken;
 	}
-	
+
 	/**
-	 * @param tok The new Token
+	 * @param tok
+	 *            The new Token
 	 */
 	public void setToken(String tok)
 	{
@@ -34,9 +43,10 @@ public class Employee extends DataWithID
 	{
 		return strPrename;
 	}
-	
+
 	/**
-	 * @param name New Prename
+	 * @param name
+	 *            New Prename
 	 */
 	public void setPrename(String name)
 	{
@@ -50,9 +60,10 @@ public class Employee extends DataWithID
 	{
 		return strSurname;
 	}
-	
+
 	/**
-	 * @param name New Surame
+	 * @param name
+	 *            New Surame
 	 */
 	public void setSurname(String name)
 	{
@@ -65,5 +76,11 @@ public class Employee extends DataWithID
 		Log.e("employee.token", strToken);
 		Log.e("employee.prename", strPrename);
 		Log.e("employee.surname", strSurname);
+	}
+
+	@Override
+	public int compareTo(Employee another)
+	{
+		return getNameFormated().compareTo(another.getNameFormated());
 	}
 }

@@ -6,6 +6,7 @@ import android.util.Log;
 import android.util.SparseArray;
 
 import de.almostintelligent.fhwsplan.data.Day;
+import de.almostintelligent.fhwsplan.data.Employee;
 import de.almostintelligent.fhwsplan.data.Faculty;
 import de.almostintelligent.fhwsplan.data.Lecture;
 
@@ -41,6 +42,24 @@ public class TimeTableFilter
 			Lecture l = lectures.get(iKey);
 			_lectures.put(l.getID(), l);
 		}
+	}
+
+	public TimeTableFilter whereEmployee(Employee e)
+	{
+		SparseArray<Lecture> lectures = getLecturesCopy();
+		for (int i = 0; i < lectures.size(); ++i)
+		{
+			Integer iKey = lectures.keyAt(i);
+			Lecture l = lectures.get(iKey);
+			if (l != null)
+			{
+				if (!l.hasLecturer(e))
+				{
+					_lectures.remove(iKey);
+				}
+			}
+		}
+		return this;
 	}
 
 	public TimeTableFilter whereID(Integer id)

@@ -1,9 +1,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:id="@+id/action_deselect_all_lectures"
+        android:id="@+id/settings_action_deselect_all_lectures"
         android:orderInCategory="100"
         android:showAsAction="never"
         android:title="@string/settings_deselect_all_lectures"/>
+    <item android:id="@+id/settings_action_show_filter" android:orderInCategory="101" android:title="@string/settings_filter" android:showAsAction="never"></item>
 
 </menu>

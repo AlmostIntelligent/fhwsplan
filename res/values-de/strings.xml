@@ -2,10 +2,7 @@
 <resources>
 
     <string name="app_name">FHW Splan</string>
-    <string name="hello_world">Hallo Welt!</string>
-    <string name="action_timetable_day">Tagesplan</string>
     <string name="action_edit_timetable">Vorlesungen einstellen</string>
-    <string name="settings_desc_style">Aussehen</string>
     <string name="settings_deselect_all_lectures">Alle abwählen</string>
     <string name="title_activity_settings">Vorlesungen</string>
     <string name="week_day_mon_short">Mo</string>
@@ -19,5 +16,11 @@
     <string name="week_day_thu_long">Donnerstag</string>
     <string name="week_day_fri_long">Freitag</string>
     <string name="button_save">Speichern</string>
+    <string name="lecture">Vorlesung</string>
+    <string name="semester">Semester</string>
+    <string name="employee">"Mitarbeiter"</string>
+    <string name="faculty">Fachrichtung</string>
+    <string name="settings_filter">Filter</string>
+    <string name="placeholder">Platzhalter</string>
 
 </resources>

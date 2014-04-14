@@ -7,27 +7,39 @@ import java.util.Vector;
 import de.almostintelligent.fhwsplan.config.SplanConfig;
 import de.almostintelligent.fhwsplan.data.DataUtils;
 import de.almostintelligent.fhwsplan.data.Employee;
+import de.almostintelligent.fhwsplan.data.Faculty;
 import de.almostintelligent.fhwsplan.data.Lecture;
 import de.almostintelligent.fhwsplan.data.LectureDate;
 import de.almostintelligent.fhwsplan.data.sort.LectureSortingNameAndRoom;
+import de.almostintelligent.fhwsplan.filters.TimeTableFilter;
+import de.almostintelligent.fhwsplan.fragments.SettingsLectureFilterFrament;
 import android.os.Bundle;
-import android.app.Activity;
 import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CheckBox; 
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NavUtils;
 
-public class SettingsActivity extends Activity
+public class SettingsActivity extends FragmentActivity implements
+		SettingsLectureFilterFrament.OnFilterDismissListener
 {
 
 	HashSet<Integer>	setSelectedLectures	= new HashSet<Integer>();
 	Vector<CheckBox>	vecCheckboxes		= new Vector<CheckBox>();
 
-	
+	Employee			filterEmployee;
+	Faculty				filterFaculty;
+
+	public void onFilterButtonClick(View view)
+	{
+		NavUtils.navigateUpFromSameTask(this);
+	}
+
 	public void onSelectLecture(View v)
 	{
 		CheckBox cb = (CheckBox) v;
@@ -61,17 +73,23 @@ public class SettingsActivity extends Activity
 		NavUtils.navigateUpFromSameTask(this);
 	}
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState)
+	private void buildView()
 	{
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_settings);
-
-		setSelectedLectures = SplanConfig.LoadSelectedIDs(this);
-
 		Vector<LectureSortingNameAndRoom> listLectures = new Vector<LectureSortingNameAndRoom>();
 
 		SparseArray<Lecture> lectures = DataUtils.get().getLectures();
+
+		if (filterEmployee != null || filterFaculty != null)
+		{
+			TimeTableFilter filter = new TimeTableFilter(lectures);
+			if (filterEmployee != null)
+				filter.whereEmployee(filterEmployee);
+			if (filterFaculty != null)
+				filter.whereFaculty(filterFaculty);
+
+			lectures = filter.getLectures();
+		}
+
 		for (int i = 0; i < lectures.size(); ++i)
 		{
 			Integer iKey = lectures.keyAt(i);
@@ -94,6 +112,7 @@ public class SettingsActivity extends Activity
 		Collections.sort(listLectures);
 
 		LinearLayout container = (LinearLayout) findViewById(R.id.SettingsLecturesContainer);
+		container.removeAllViews();
 
 		for (LectureSortingNameAndRoom l : listLectures)
 		{
@@ -178,6 +197,17 @@ public class SettingsActivity extends Activity
 			container.addView(newItem);
 
 		}
+	}
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState)
+	{
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_settings);
+
+		setSelectedLectures = SplanConfig.LoadSelectedIDs(this);
+
+		buildView();
 
 		setupActionBar();
 	}
@@ -220,7 +250,7 @@ public class SettingsActivity extends Activity
 			case android.R.id.home:
 				NavUtils.navigateUpFromSameTask(this);
 				return true;
-			case R.id.action_deselect_all_lectures:
+			case R.id.settings_action_deselect_all_lectures:
 
 				for (CheckBox c : vecCheckboxes)
 				{
@@ -229,8 +259,34 @@ public class SettingsActivity extends Activity
 
 				setSelectedLectures.clear();
 				return true;
+			case R.id.settings_action_show_filter:
+			{
+				FragmentManager fm = getSupportFragmentManager();
+				SettingsLectureFilterFrament fragment = new SettingsLectureFilterFrament();
+				fragment.show(fm, "fragment_edit_filter");
+				fragment.setOnFilterDismissListener(this);
+				return true;
+			}
 		}
 		return super.onOptionsItemSelected(item);
 	}
 
+	@Override
+	public void onFilterDismiss(int iRes, SettingsLectureFilterFrament fragment)
+	{
+		if (iRes == R.id.settings_filter_btnSave)
+		{
+			filterEmployee = (Employee) fragment.employeeSpinner
+					.getSelectedItem();
+			filterFaculty = (Faculty) fragment.facultySpinner.getSelectedItem();
+
+			if (filterEmployee != null && filterEmployee.getID() == -1)
+				filterEmployee = null;
+			if (filterFaculty != null && filterFaculty.getID() == -1)
+				filterFaculty = null;
+
+			buildView();
+		}
+
+	}
 }

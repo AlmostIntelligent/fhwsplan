@@ -4,7 +4,7 @@ import java.util.Vector;
 
 import android.util.Log;
 
-public class Faculty extends DataWithID
+public class Faculty extends DataWithID implements Comparable<Faculty>
 {
 	private String			strShortName;
 	private String			strLongName;
@@ -59,6 +59,12 @@ public class Faculty extends DataWithID
 			Log.e("faculty.sem", i.toString());
 		}
 
+	}
+
+	@Override
+	public int compareTo(Faculty another)
+	{
+		return getLongName().compareTo(another.getLongName());
 	}
 
 }

@@ -65,6 +65,11 @@ public class Lecture extends DataWithID implements Comparable<Lecture>
 		return facultySemesterInLecture.get(f.getID()) != null;
 	}
 
+	public boolean hasLecturer(Employee e)
+	{
+		return lecturers.contains(e);
+	}
+
 	public boolean hasSemester(Integer s)
 	{
 		int key = 0;

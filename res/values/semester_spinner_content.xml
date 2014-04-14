@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="settings_semester_list">
+        <item format="integer" type="integer">1</item>
+        <item format="integer" type="integer">2</item>
+        <item format="integer" type="integer">3</item>
+        <item format="integer" type="integer">4</item>
+        <item format="integer" type="integer">5</item>
+        <item format="integer" type="integer">6</item>
+        <item format="integer" type="integer">7</item>
+        <item format="integer" type="integer">8</item>
+        <item format="integer" type="integer">9</item>
+        <item format="integer" type="integer">10</item>
+    </string-array>
+
+</resources>

@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Vector;
 
 import org.xml.sax.Attributes;
@@ -27,7 +28,7 @@ public class DataUtils implements ContentHandler
 	private static DataUtils	instance	= null;
 
 	public static DataUtils get()
-	{ 
+	{
 		if (instance == null)
 			instance = new DataUtils();
 		return instance;
@@ -65,6 +66,63 @@ public class DataUtils implements ContentHandler
 
 	private DataUtils()
 	{
+	}
+
+	public Vector<String> getEmployeeNamesFormated()
+	{
+		Vector<String> result = new Vector<String>();
+
+		for (int i = 0; i < employees.size(); ++i)
+		{
+			Integer iKey = employees.keyAt(i);
+			Employee e = employees.get(iKey);
+			result.add(String.format("%s %s (%s)", e.getPrename(),
+					e.getSurname(), e.getToken()));
+		}
+
+		Collections.sort(result);
+
+		return result;
+	}
+
+	private <T> Vector<T> toVector(SparseArray<T> r)
+	{
+		Vector<T> result = new Vector<T>();
+
+		for (int i = 0; i < r.size(); ++i)
+		{
+			Integer iKey = r.keyAt(i);
+			T f = r.get(iKey);
+			result.add(f);
+		}
+
+		return result;
+	}
+
+	public Vector<Employee> getEmployees()
+	{
+		return toVector(employees);
+	}
+
+	public Vector<Faculty> getFaculties()
+	{
+		return toVector(faculties);
+	}
+
+	public Vector<String> getFacultyNamesFormated()
+	{
+		Vector<String> result = new Vector<String>();
+
+		for (int i = 0; i < faculties.size(); ++i)
+		{
+			Integer iKey = faculties.keyAt(i);
+			Faculty f = faculties.get(iKey);
+			result.add(String.format("%s", f.getLongName()));
+		}
+
+		Collections.sort(result);
+
+		return result;
 	}
 
 	public Vector<Lecture> getLecturesByDay(Day d, Faculty f, Integer semester)
