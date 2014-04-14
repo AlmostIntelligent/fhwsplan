@@ -14,7 +14,6 @@ import de.almostintelligent.fhwsplan.data.sort.LectureSortingNameAndRoom;
 import de.almostintelligent.fhwsplan.filters.TimeTableFilter;
 import de.almostintelligent.fhwsplan.fragments.SettingsLectureFilterFrament;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;

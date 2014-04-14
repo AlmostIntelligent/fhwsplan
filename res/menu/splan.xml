@@ -2,8 +2,9 @@
 
     <item
         android:id="@+id/action_edit_timetable"
+        android:icon="@drawable/ic_action_content_edit"
         android:orderInCategory="100"
-        android:showAsAction="never"
+        android:showAsAction="ifRoom"
         android:title="@string/action_edit_timetable"/>
 
 </menu>
