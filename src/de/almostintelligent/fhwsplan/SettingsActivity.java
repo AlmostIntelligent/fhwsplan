@@ -14,6 +14,7 @@ import de.almostintelligent.fhwsplan.data.sort.LectureSortingNameAndRoom;
 import de.almostintelligent.fhwsplan.filters.TimeTableFilter;
 import de.almostintelligent.fhwsplan.fragments.SettingsLectureFilterFrament;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,6 +35,7 @@ public class SettingsActivity extends FragmentActivity implements
 
 	Employee			filterEmployee;
 	Faculty				filterFaculty;
+	Integer				filterSemester		= Integer.valueOf(0);
 
 	public void onFilterButtonClick(View view)
 	{
@@ -79,13 +81,25 @@ public class SettingsActivity extends FragmentActivity implements
 
 		SparseArray<Lecture> lectures = DataUtils.get().getLectures();
 
-		if (filterEmployee != null || filterFaculty != null)
+		if (filterEmployee != null || filterFaculty != null
+				|| filterSemester != 0)
 		{
 			TimeTableFilter filter = new TimeTableFilter(lectures);
 			if (filterEmployee != null)
 				filter.whereEmployee(filterEmployee);
-			if (filterFaculty != null)
+
+			if (filterFaculty != null && filterSemester > 0)
+			{
+				filter.whereFacultyAndSemester(filterFaculty, filterSemester);
+			}
+			else if (filterFaculty != null && filterSemester <= 0)
+			{
 				filter.whereFaculty(filterFaculty);
+			}
+			else if (filterFaculty == null && filterSemester > 0)
+			{
+				filter.whereSemester(filterSemester);
+			}
 
 			lectures = filter.getLectures();
 		}
@@ -279,6 +293,17 @@ public class SettingsActivity extends FragmentActivity implements
 			filterEmployee = (Employee) fragment.employeeSpinner
 					.getSelectedItem();
 			filterFaculty = (Faculty) fragment.facultySpinner.getSelectedItem();
+
+			String strSemester = (String) fragment.semesterSpinner
+					.getSelectedItem();
+			try
+			{
+				filterSemester = Integer.valueOf(strSemester);
+			}
+			catch (Exception e)
+			{
+				filterSemester = 0;
+			}
 
 			if (filterEmployee != null && filterEmployee.getID() == -1)
 				filterEmployee = null;

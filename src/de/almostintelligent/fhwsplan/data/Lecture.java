@@ -47,21 +47,6 @@ public class Lecture extends DataWithID implements Comparable<Lecture>
 
 	public boolean isForFaculty(Faculty f)
 	{
-		// if (facultySemesterInLecture.get(f.getID()) != null)
-		// {
-		// Log.e("divider",
-		// "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-		// Log.e("lecture.isForFaculty", getDescription() + " ID: "
-		// + getID().toString() + " is for faculty " + f.getLongName()
-		// + " ID: " + f.getID().toString());
-		// Log.e("divider",
-		// "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-		// }
-		// else
-		// {
-		// Log.e("lecture.isForFaculty", getDescription() +
-		// " IS NOT for faculty " + f.getLongName());
-		// }
 		return facultySemesterInLecture.get(f.getID()) != null;
 	}
 
@@ -81,8 +66,6 @@ public class Lecture extends DataWithID implements Comparable<Lecture>
 			{
 				if (s.equals(semeseter))
 				{
-					Log.e("lecture.hasSemester", s.toString() + " == "
-							+ semeseter.toString());
 					return true;
 				}
 			}
@@ -168,11 +151,6 @@ public class Lecture extends DataWithID implements Comparable<Lecture>
 
 	public void addFacultySemester(Faculty f, Integer s)
 	{
-		// if (f.getID() == 13)
-		// Log.e("lecture.addFacultySemester",
-		// getID().toString() + ": " + getDescription() + " "
-		// + getDescAppendix() + " " + f.getLongName()
-		// + " Semester: " + s.toString());
 		if (facultySemesterInLecture.get(f.getID()) == null)
 		{
 			Vector<Integer> semester = new Vector<Integer>();

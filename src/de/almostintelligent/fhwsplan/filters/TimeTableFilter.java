@@ -157,6 +157,7 @@ public class TimeTableFilter
 			{
 				if (!l.hasSemester(semester))
 				{
+					Log.e("remove semester", semester.toString());
 					_lectures.remove(iKey);
 				}
 			}

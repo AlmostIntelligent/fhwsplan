@@ -22,5 +22,6 @@
     <string name="faculty">Faculty</string>
     <string name="settings_filter">Filter</string>
     <string name="placeholder">Placeholder</string>
+    <string name="semester_spinner_value_all">All</string>
 
 </resources>

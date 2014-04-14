@@ -2,6 +2,7 @@
 <resources>
 
     <string-array name="settings_semester_list">
+        <item format="integer" type="integer">@string/semester_spinner_value_all</item>
         <item format="integer" type="integer">1</item>
         <item format="integer" type="integer">2</item>
         <item format="integer" type="integer">3</item>
