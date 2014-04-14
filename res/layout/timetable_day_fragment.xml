@@ -9,8 +9,7 @@
         android:id="@+id/TimeTableContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#ddd"
-        android:dividerPadding="2dp"
+        android:padding="5dp"
         android:orientation="vertical" >
     </LinearLayout>
 

@@ -98,6 +98,22 @@ public class TimeTableDayFragment extends android.support.v4.app.Fragment
 		{
 			LinearLayout newItem = (LinearLayout) _inflater.inflate(
 					R.layout.timetable_item, null);
+			LinearLayout layoutContainer = (LinearLayout) newItem
+					.findViewById(R.id.timetable_item_container);
+			if (layoutContainer != null)
+			{
+				try
+				{
+					layoutContainer.getLayoutParams().height = (int) getResources()
+							.getDimension(R.dimen.timetable_item_time_unit)
+							* s.lecture.getDuration();
+				}
+				catch (Exception e)
+				{
+					// TODO: handle exception
+				}
+
+			}
 			setTextViewTextByID(R.id.item_lecture_name, newItem,
 					s.lecture.getLectureName());
 			setTextViewTextByID(R.id.item_lecture_appendix, newItem,

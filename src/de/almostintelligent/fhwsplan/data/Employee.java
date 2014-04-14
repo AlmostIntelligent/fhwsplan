@@ -8,6 +8,7 @@ public class Employee extends DataWithID implements Comparable<Employee>
 	private String	strToken	= new String();
 	private String	strPrename	= new String();
 	private String	strSurname	= new String();
+	private Boolean	bAttendance	= Boolean.valueOf(false);
 
 	public String getNameFormated()
 	{
@@ -17,6 +18,16 @@ public class Employee extends DataWithID implements Comparable<Employee>
 		}
 		return String.format("%s %s (%s)", getPrename(), getSurname(),
 				getToken());
+	}
+
+	public void setAttendance(Boolean b)
+	{
+		bAttendance = b;
+	}
+
+	public Boolean getAttendance()
+	{
+		return bAttendance;
 	}
 
 	/**

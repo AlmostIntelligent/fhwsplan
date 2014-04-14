@@ -349,12 +349,23 @@ public class DataUtils implements ContentHandler
 		}
 	}
 
+	boolean	bLoadingLectureLecturer_dozent;
+	boolean	bLoadingLectureLecturer_hoerer;
+
 	private void endLectureLecturerElement(String localName)
 	{
-		if (localName.equalsIgnoreCase("id"))
+		if (bLoadingLectureLecturer_dozent)
 		{
-			lectureLoading.addLecturer(getEmployee(Integer
-					.valueOf(currentValue)));
+			if (localName.equalsIgnoreCase("id"))
+			{
+				lectureLoading.addLecturer(getEmployee(Integer
+						.valueOf(currentValue)));
+			}
+			else
+			{
+				if (localName.equalsIgnoreCase("dozent"))
+					bLoadingLectureLecturer_dozent = false;
+			}
 		}
 	}
 
@@ -484,6 +495,10 @@ public class DataUtils implements ContentHandler
 		{
 			employeeLoading.setID(Integer.valueOf(currentValue));
 		}
+		else if (localName.equalsIgnoreCase("teilnahme"))
+		{
+			employeeLoading.setAttendance(Boolean.valueOf(currentValue));
+		}
 		else if (localName.equalsIgnoreCase("person"))
 		{
 			employees.put(employeeLoading.getID(), employeeLoading);
@@ -610,21 +625,25 @@ public class DataUtils implements ContentHandler
 
 			xmlReader.setContentHandler(this);
 			xmlReader.parse(src);
-
 		}
 		catch (SAXException e)
 		{
 			Log.e("DataUtils", "SAXException");
+			Log.e("DataUtils.SAXException", e.getMessage());
+			Log.e("DataUtils.SAXException", e.getLocalizedMessage());
+
 			e.printStackTrace();
 		}
 		catch (FileNotFoundException e)
 		{
 			Log.e("DataUtils", "FileNotFoundException");
+			Log.e("DataUtils.FileNotFoundException", e.getMessage());
 			e.printStackTrace();
 		}
 		catch (IOException e)
 		{
 			Log.e("DataUtils", "IOException");
+			Log.e("DataUtils.IOException", e.getMessage());
 			e.printStackTrace();
 		}
 
@@ -717,26 +736,33 @@ public class DataUtils implements ContentHandler
 		}
 		else if (bLoadingLecutres)
 		{
-			if (localName.equalsIgnoreCase("veranstaltung"))
+			if (bLoadingLectureLecturer && localName.equalsIgnoreCase("dozent"))
 			{
-				lectureLoading = new Lecture();
+				bLoadingLectureLecturer_dozent = true;
 			}
-			else if (localName.equalsIgnoreCase("termine"))
+			else
 			{
-				bLoadingLectureDate = true;
-			}
-			else if (bLoadingLectureDate
-					&& localName.equalsIgnoreCase("termin"))
-			{
-				lectureDateLoading = new LectureDate();
-			}
-			else if (localName.equalsIgnoreCase("mitarbeiter"))
-			{
-				bLoadingLectureLecturer = true;
-			}
-			else if (localName.equalsIgnoreCase("fachrichtungen"))
-			{
-				bLoadingLectureFaculties = true;
+				if (localName.equalsIgnoreCase("veranstaltung"))
+				{
+					lectureLoading = new Lecture();
+				}
+				else if (localName.equalsIgnoreCase("termine"))
+				{
+					bLoadingLectureDate = true;
+				}
+				else if (bLoadingLectureDate
+						&& localName.equalsIgnoreCase("termin"))
+				{
+					lectureDateLoading = new LectureDate();
+				}
+				else if (localName.equalsIgnoreCase("mitarbeiter"))
+				{
+					bLoadingLectureLecturer = true;
+				}
+				else if (localName.equalsIgnoreCase("fachrichtungen"))
+				{
+					bLoadingLectureFaculties = true;
+				}
 			}
 		}
 
