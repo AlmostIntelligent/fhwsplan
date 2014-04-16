@@ -786,4 +786,9 @@ public class DataUtils implements ContentHandler
 
 	}
 
+	public int getPlanTimeCount()
+	{
+		return times.size();
+	}
+
 }

@@ -6,4 +6,7 @@
     <color name="timetable_item_lecture_room">#666</color>
     <color name="timetable_item_lecture_lecturer">#666</color>
     
+    <color name="timetable_time_border">#888</color>
+    
+    
 </resources>
