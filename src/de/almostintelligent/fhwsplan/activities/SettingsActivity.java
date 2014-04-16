@@ -1,17 +1,18 @@
-package de.almostintelligent.fhwsplan;
+package de.almostintelligent.fhwsplan.activities;
 
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Vector;
 
+import de.almostintelligent.fhwsplan.R;
 import de.almostintelligent.fhwsplan.config.SplanConfig;
 import de.almostintelligent.fhwsplan.data.DataUtils;
 import de.almostintelligent.fhwsplan.data.Employee;
 import de.almostintelligent.fhwsplan.data.Faculty;
 import de.almostintelligent.fhwsplan.data.Lecture;
 import de.almostintelligent.fhwsplan.data.LectureDate;
+import de.almostintelligent.fhwsplan.data.filters.TimeTableFilter;
 import de.almostintelligent.fhwsplan.data.sort.LectureSortingNameAndRoom;
-import de.almostintelligent.fhwsplan.filters.TimeTableFilter;
 import de.almostintelligent.fhwsplan.fragments.SettingsLectureFilterFrament;
 import android.os.Bundle;
 import android.util.SparseArray;

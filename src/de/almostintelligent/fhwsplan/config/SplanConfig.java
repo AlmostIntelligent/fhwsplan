@@ -8,7 +8,7 @@ import java.util.HashSet;
 
 import android.content.Context;
 
-import de.almostintelligent.fhwsplan.constants.Constants;
+import de.almostintelligent.fhwsplan.Constants;
 import de.almostintelligent.fhwsplan.data.LectureIDSerializer;
 
 public class SplanConfig

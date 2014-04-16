@@ -10,9 +10,10 @@ import de.almostintelligent.fhwsplan.data.DataUtils;
 import de.almostintelligent.fhwsplan.data.Day;
 import de.almostintelligent.fhwsplan.data.Lecture;
 import de.almostintelligent.fhwsplan.data.LectureDate;
+import de.almostintelligent.fhwsplan.data.PlanTime;
 import de.almostintelligent.fhwsplan.data.Room;
+import de.almostintelligent.fhwsplan.data.filters.TimeTableFilter;
 import de.almostintelligent.fhwsplan.data.sort.LectureSortingDate;
-import de.almostintelligent.fhwsplan.filters.TimeTableFilter;
 import android.os.Bundle;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -37,8 +38,35 @@ public class TimeTableDayFragment extends android.support.v4.app.Fragment
 
 		iDay = getArguments().getInt("day");
 
-		return inflater.inflate(R.layout.timetable_day_fragment, container,
-				false);
+		View view = inflater.inflate(R.layout.fragment_timetable_day,
+				container, false);
+
+		LinearLayout times = (LinearLayout) view
+				.findViewById(R.id.timetable_times_container);
+		if (times != null)
+		{
+			Vector<PlanTime> plantimes = DataUtils.get().getPlanTimes();
+			for (PlanTime t : plantimes)
+			{
+				LinearLayout timeLayout = (LinearLayout) inflater.inflate(
+						R.layout.timetable_time, null, false);
+				if (timeLayout != null)
+				{
+					TextView time = (TextView) timeLayout
+							.findViewById(R.id.timetable_time_text);
+
+					if (time != null)
+					{
+						time.setText(t.getStartTime() + "\n" + t.getEndTime());
+					}
+
+					times.addView(timeLayout);
+				}
+			}
+
+		}
+
+		return view;
 	}
 
 	@Override
@@ -65,7 +93,7 @@ public class TimeTableDayFragment extends android.support.v4.app.Fragment
 		SparseArray<Lecture> lectures = filter.getLectures();
 
 		LinearLayout timeTableContainer = (LinearLayout) getView()
-				.findViewById(R.id.TimeTableContainer);
+				.findViewById(R.id.timetable_container);
 		if (timeTableContainer == null)
 			return;
 

@@ -1,4 +1,4 @@
-package de.almostintelligent.fhwsplan.filters;
+package de.almostintelligent.fhwsplan.data.filters;
 
 import java.util.HashSet;
 

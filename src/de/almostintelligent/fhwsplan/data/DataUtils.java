@@ -99,6 +99,16 @@ public class DataUtils implements ContentHandler
 		return result;
 	}
 
+	public Vector<PlanTime> getPlanTimes()
+	{
+		return toVector(times);
+	}
+
+	public Vector<Day> getDays()
+	{
+		return toVector(days);
+	}
+
 	public Vector<Employee> getEmployees()
 	{
 		return toVector(employees);

@@ -49,7 +49,7 @@ public class SettingsLectureFilterFrament extends DialogFragment implements
 	{
 		getDialog().setTitle(R.string.settings_filter);
 
-		View view = inflater.inflate(R.layout.settings_filter_dialog_fragment,
+		View view = inflater.inflate(R.layout.fragment_settings_filter_dialog,
 				container);
 
 		semesterSpinner = (Spinner) view

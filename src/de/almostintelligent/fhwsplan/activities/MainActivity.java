@@ -1,9 +1,10 @@
-package de.almostintelligent.fhwsplan;
+package de.almostintelligent.fhwsplan.activities;
 
 import java.util.Calendar;
 
 import com.example.android.common.view.SlidingTabLayout;
 
+import de.almostintelligent.fhwsplan.R;
 import de.almostintelligent.fhwsplan.adapters.TimeTableDaysFragmentPagerAdapter;
 import de.almostintelligent.fhwsplan.data.DataUtils;
 import android.content.Intent;

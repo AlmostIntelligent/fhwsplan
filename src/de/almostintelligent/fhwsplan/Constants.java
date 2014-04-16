@@ -1,4 +1,4 @@
-package de.almostintelligent.fhwsplan.constants;
+package de.almostintelligent.fhwsplan;
 
 public class Constants
 {
