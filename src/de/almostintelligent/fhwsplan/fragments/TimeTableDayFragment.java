@@ -16,6 +16,7 @@ import de.almostintelligent.fhwsplan.data.filters.TimeTableFilter;
 import de.almostintelligent.fhwsplan.data.sort.LectureSortingDate;
 import de.almostintelligent.fhwsplan.utils.Utils;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -102,10 +103,48 @@ public class TimeTableDayFragment extends android.support.v4.app.Fragment
 		// builder.append(String.valueOf(iOccupancy[i]));
 		// builder.append(",");
 		// }
+		// Log.e("iOccupancy", builder.toString());
 
 		int iMaxOccupancy = Utils.maxInArray(iOccupancy);
 
-		// Log.e("iOccupancy", builder.toString());
+		boolean[][] bOccupancyByCol = new boolean[DataUtils.get()
+				.getPlanTimeCount()][iMaxOccupancy];
+		for (int i = 0; i < iOccupancy.length; ++i)
+		{
+			int iOccupancyCount = iOccupancy[i];
+			while (iOccupancyCount > 0)
+			{
+				bOccupancyByCol[i][iOccupancyCount - 1] = true;
+				--iOccupancyCount;
+			}
+		}
+
+		for (boolean[] x : bOccupancyByCol)
+		{
+			StringBuilder builder = new StringBuilder();
+			for (boolean c : x)
+			{
+				builder.append(String.valueOf(c));
+				builder.append(" ");
+			}
+			Log.e("iOccupancyGrid", builder.toString());
+		}
+		Log.e("-", "-");
+
+		LinearLayout[] layoutCols = new LinearLayout[iMaxOccupancy];
+		for (int i = 0; i < layoutCols.length; ++i)
+		{
+			layoutCols[i] = (LinearLayout) _inflater.inflate(
+					R.layout.timetable_col_layout, null);
+			LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) layoutCols[i]
+					.getLayoutParams();
+			if (params != null)
+			{
+				params.weight = 1.0f;
+				// params.width = LinearLayout.LayoutParams.MATCH_PARENT;
+				layoutCols[i].setLayoutParams(params);
+			}
+		}
 
 		for (LectureSortingDate s : listSort)
 		{
@@ -113,6 +152,7 @@ public class TimeTableDayFragment extends android.support.v4.app.Fragment
 					R.dimen.timetable_item_time_unit);
 			int iSpace = (int) getResources().getDimension(
 					R.dimen.timetable_item_time_space);
+			int iCol = 0;
 
 			LinearLayout newItem = (LinearLayout) _inflater.inflate(
 					R.layout.timetable_item, null);
@@ -134,16 +174,26 @@ public class TimeTableDayFragment extends android.support.v4.app.Fragment
 					// TODO: handle exception
 				}
 
-				int iMarginTop = calculateSpaceToPrevItem(iOccupancy, s,
-						iUnitHeight, iSpace);
-
-				LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) layoutContainer
-						.getLayoutParams();
-				if (params != null)
+				while (iCol < iMaxOccupancy
+						&& bOccupancyByCol[s.date.getTime().getID() - 1][iCol])
 				{
-					params.setMargins(params.leftMargin, params.topMargin
-							+ iMarginTop, params.topMargin, params.bottomMargin);
+					++iCol;
 				}
+
+				if (iCol >= iMaxOccupancy)
+					iCol = iMaxOccupancy - 1;
+
+				// int iMarginTop = calculateSpaceToPrevItem(iOccupancy, s,
+				// iUnitHeight, iSpace);
+				//
+				// LinearLayout.LayoutParams params =
+				// (LinearLayout.LayoutParams) layoutContainer
+				// .getLayoutParams();
+				// if (params != null)
+				// {
+				// params.setMargins(params.leftMargin, params.topMargin
+				// + iMarginTop, params.topMargin, params.bottomMargin);
+				// }
 			}
 
 			setTextViewTextByID(R.id.item_lecture_name, newItem,
@@ -162,7 +212,12 @@ public class TimeTableDayFragment extends android.support.v4.app.Fragment
 			setTextViewTextByID(R.id.item_lecture_time, newItem,
 					constructTimeString(s));
 
-			timeTableContainer.addView(newItem);
+			layoutCols[iCol].addView(newItem);
+		}
+
+		for (LinearLayout l : layoutCols)
+		{
+			timeTableContainer.addView(l);
 		}
 
 	}
@@ -174,8 +229,8 @@ public class TimeTableDayFragment extends android.support.v4.app.Fragment
 				.getLectures());
 		SparseArray<Lecture> lectures = filter.getLectures();
 		// +1 because getDay searches by ID. Monday = 1 and not 0
-		Day day = DataUtils.get().getDay(iDay + 1);
-		filter.whereDay(day);
+		// Day day = DataUtils.get().getDay(iDay + 1);
+		// filter.whereDay(day);
 		// if (setSelectedLectures.size() != 0)
 		{
 			filter.whereIDs(setSelectedLectures);
@@ -191,7 +246,7 @@ public class TimeTableDayFragment extends android.support.v4.app.Fragment
 
 			for (LectureDate d : dates)
 			{
-				if (d.getDay().getID() == day.getID())
+				// if (d.getDay().getID() == day.getID())
 				{
 					LectureSortingDate s = new LectureSortingDate();
 					s.lecture = l;
@@ -248,10 +303,6 @@ public class TimeTableDayFragment extends android.support.v4.app.Fragment
 	{
 		int iPlanTimeCount = DataUtils.get().getPlanTimeCount();
 		int[] iOccupancy = new int[iPlanTimeCount];
-		for (int i = 0; i < iOccupancy.length; i++)
-		{
-			iOccupancy[i] = 0;
-		}
 
 		for (LectureSortingDate s : listSort)
 		{
