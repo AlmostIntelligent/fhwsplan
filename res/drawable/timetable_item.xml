@@ -1,20 +1,8 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item><layer-list>
-            <item android:right="0dp" android:top="0dp"><shape>
-                    <corners android:radius="3dp" />
-
-                    <solid android:color="#eee" />
-                </shape></item>
-            <item android:bottom="0dp" android:left="0dp"><shape>
-                    <gradient android:angle="270" android:endColor="#eee" android:startColor="#ddd" />
-
-                    <stroke android:width="0.5dp" android:color="#bbb" />
-
-                    <corners android:radius="4dp" />
-
-                    <padding android:bottom="0dp" android:left="0dp" android:right="0dp" android:top="0dp" />
-                </shape></item>
+    <item><layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+            <item android:drawable="@drawable/timetable_time_outer"/>
+            <item android:bottom="0.5dp" android:drawable="@drawable/timetable_item_inner" android:left="0.5dp" android:right="0.5dp" android:top="0.5dp"/>
         </layer-list></item>
 
 </selector>

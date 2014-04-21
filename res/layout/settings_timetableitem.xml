@@ -3,34 +3,41 @@
     style="@style/AppBaseTheme"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="2dp"
-    android:layout_marginRight="2dp"
-    android:layout_marginTop="5dp"
-    android:background="@drawable/timetable_item"
     android:baselineAligned="false"
     android:orientation="horizontal"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
-    android:paddingTop="10dp" >
-
-    <CheckBox
-        android:id="@+id/cbSelectLecture"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="5dp"
-        android:checked="false"
-        android:onClick="onSelectLecture" />
+    android:padding="0dp" >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:layout_marginBottom="1dp"
+        android:layout_marginTop="3dp"
+        android:background="@drawable/timetable_item" >
 
-        <LinearLayout
+        <View
+            android:id="@+id/timetable_item_color"
+            android:layout_width="5dp"
+            android:layout_height="match_parent"
+            android:layout_margin="0.5dp"
+            android:layout_marginRight="5dp"
+            android:background="#000" />
+
+        <CheckBox
+            android:id="@+id/cbSelectLecture"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1" >
+            android:layout_gravity="center"
+            android:layout_margin="0dp"
+            android:checked="false"
+            android:onClick="onSelectLecture" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/timetable_item_time_unit"
+            android:orientation="vertical"
+            android:paddingBottom="5dp"
+            android:paddingLeft="4dp"
+            android:paddingTop="5dp" >
 
             <TextView
                 android:id="@+id/item_settings_lecture_name"
@@ -51,27 +58,23 @@
                 android:textColor="@color/timetable_item_lecture_appendix"
                 android:textSize="@dimen/timetable_item_lecture_appendix_font_size" />
 
+            <TextView
+                android:id="@+id/item_settings_lecture_times"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/placeholder"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/timetable_item_lecture_time"
+                android:textSize="@dimen/timetable_item_lecture_time_font_size" />
+
+            <TextView
+                android:id="@+id/item_settings_lecture_lecturer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/placeholder"
+                android:textColor="@color/timetable_item_lecture_lecturer"
+                android:textSize="@dimen/timetable_item_lecture_room_font_size" />
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/item_settings_lecture_times"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/placeholder"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/timetable_item_lecture_time"
-            android:textSize="@dimen/timetable_item_lecture_time_font_size" />
-
-        <TextView
-            android:id="@+id/item_settings_lecture_lecturer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/placeholder"
-            android:textColor="@color/timetable_item_lecture_lecturer"
-            android:textSize="@dimen/timetable_item_lecture_room_font_size" />
-
     </LinearLayout>
 
 </LinearLayout>

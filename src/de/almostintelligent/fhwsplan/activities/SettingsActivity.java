@@ -15,6 +15,7 @@ import de.almostintelligent.fhwsplan.data.filters.TimeTableFilter;
 import de.almostintelligent.fhwsplan.data.sort.LectureSortingNameAndRoom;
 import de.almostintelligent.fhwsplan.fragments.SettingsLectureFilterFrament;
 import de.almostintelligent.fhwsplan.utils.Utils;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.SparseArray;
 import android.view.Menu;
@@ -128,6 +129,7 @@ public class SettingsActivity extends FragmentActivity implements
 		LinearLayout container = (LinearLayout) findViewById(R.id.SettingsLecturesContainer);
 		container.removeAllViews();
 
+		float[] hsvArray = new float[] { 0.0f, 1.0f, 1.0f };
 		for (LectureSortingNameAndRoom l : listLectures)
 		{
 
@@ -136,8 +138,22 @@ public class SettingsActivity extends FragmentActivity implements
 
 			Utils.setTextViewTextByID(R.id.item_settings_lecture_name, newItem,
 					l.lecture.getLectureName());
-			Utils.setTextViewTextByID(R.id.item_settings_lecture_appendix, newItem,
-					l.lecture.getLectureAppendix());
+			Utils.setTextViewTextByID(R.id.item_settings_lecture_appendix,
+					newItem, l.lecture.getLectureAppendix());
+
+			View vColor = newItem.findViewById(R.id.timetable_item_color);
+			if (vColor != null)
+			{
+
+				String hash = l.lecture.getLectureName()
+						+ l.lecture.getLectureAppendix();
+				int iColorHash = Math.abs(hash.hashCode() % 360);
+
+				hsvArray[0] = (iColorHash * 1.0f);
+				int iColor = Color.HSVToColor(hsvArray);
+
+				vColor.setBackgroundColor(iColor);
+			}
 
 			CheckBox cbSelected = (CheckBox) newItem
 					.findViewById(R.id.cbSelectLecture);
@@ -204,8 +220,8 @@ public class SettingsActivity extends FragmentActivity implements
 				else
 					strTimes.append("No Time");
 
-				Utils.setTextViewTextByID(R.id.item_settings_lecture_times, newItem,
-						strTimes.toString());
+				Utils.setTextViewTextByID(R.id.item_settings_lecture_times,
+						newItem, strTimes.toString());
 			}
 
 			container.addView(newItem);

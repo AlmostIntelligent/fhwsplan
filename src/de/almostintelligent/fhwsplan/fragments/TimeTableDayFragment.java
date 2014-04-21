@@ -17,13 +17,11 @@ import de.almostintelligent.fhwsplan.data.sort.LectureSortingDate;
 import de.almostintelligent.fhwsplan.utils.Utils;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
 public class TimeTableDayFragment extends android.support.v4.app.Fragment
@@ -161,7 +159,7 @@ public class TimeTableDayFragment extends android.support.v4.app.Fragment
 				if (params != null)
 				{
 					params.setMargins(params.leftMargin, params.topMargin
-							+ iMarginTop, params.topMargin, params.bottomMargin);
+							+ iMarginTop, params.rightMargin, params.bottomMargin);
 				}
 			}
 
@@ -202,13 +200,12 @@ public class TimeTableDayFragment extends android.support.v4.app.Fragment
 
 		for (LinearLayout l : colLayouts)
 		{
-			LinearLayout.LayoutParams p = (LinearLayout.LayoutParams) l
-					.getLayoutParams();
+			LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(0,
+					LinearLayout.LayoutParams.WRAP_CONTENT);
 			if (p != null)
 			{
 				p.weight = 1.0f;
 				l.setLayoutParams(p);
-				Log.e("linear", "layout");
 			}
 
 			timeTableContainer.addView(l);
