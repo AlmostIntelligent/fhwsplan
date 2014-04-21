@@ -4,12 +4,12 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="0dp"
     android:orientation="horizontal"
-    android:paddingLeft="5dp"
+    android:paddingLeft="0dp"
     android:paddingTop="@dimen/timetable_item_time_space" >
 
     <de.almostintelligent.fhwsplan.views.VerticalTextView
         android:id="@+id/timetable_time_text"
-        android:layout_width="fill_parent"
+        android:layout_width="20dp"
         android:layout_height="@dimen/timetable_item_time_unit"
         android:background="@drawable/timetable_time"
         android:gravity="center"
