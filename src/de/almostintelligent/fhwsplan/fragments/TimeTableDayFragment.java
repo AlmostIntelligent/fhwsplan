@@ -58,8 +58,6 @@ public class TimeTableDayFragment extends android.support.v4.app.Fragment
 
 					if (time != null)
 					{
-						// time.setText(t.getStartTime() + "\n" +
-						// t.getEndTime());
 						time.setText(t.getTimeString());
 					}
 
@@ -94,18 +92,7 @@ public class TimeTableDayFragment extends android.support.v4.app.Fragment
 
 		int[] iOccupancy = calculateOccupancy(listSort);
 
-		// StringBuilder builder = new StringBuilder();
-		// builder.append(String.valueOf(iDay));
-		// builder.append(": ");
-		// for (int i = 0; i < iOccupancy.length; i++)
-		// {
-		// builder.append(String.valueOf(iOccupancy[i]));
-		// builder.append(",");
-		// }
-
 		int iMaxOccupancy = Utils.maxInArray(iOccupancy);
-
-		// Log.e("iOccupancy", builder.toString());
 
 		for (LectureSortingDate s : listSort)
 		{
@@ -146,9 +133,9 @@ public class TimeTableDayFragment extends android.support.v4.app.Fragment
 				}
 			}
 
-			setTextViewTextByID(R.id.item_lecture_name, newItem,
+			Utils.setTextViewTextByID(R.id.item_lecture_name, newItem,
 					s.lecture.getLectureName());
-			setTextViewTextByID(R.id.item_lecture_appendix, newItem,
+			Utils.setTextViewTextByID(R.id.item_lecture_appendix, newItem,
 					s.lecture.getLectureAppendix());
 
 			String strRooms = new String();
@@ -157,9 +144,9 @@ public class TimeTableDayFragment extends android.support.v4.app.Fragment
 				strRooms += r.getShortName() + " ";
 			}
 
-			setTextViewTextByID(R.id.item_lecture_room, newItem, strRooms);
+			Utils.setTextViewTextByID(R.id.item_lecture_room, newItem, strRooms);
 
-			setTextViewTextByID(R.id.item_lecture_time, newItem,
+			Utils.setTextViewTextByID(R.id.item_lecture_time, newItem,
 					constructTimeString(s));
 
 			timeTableContainer.addView(newItem);
@@ -263,16 +250,5 @@ public class TimeTableDayFragment extends android.support.v4.app.Fragment
 			}
 		}
 		return iOccupancy;
-	}
-
-	private void setTextViewTextByID(int resID, View parent, String caption)
-	{
-		if (parent == null)
-			return;
-		TextView txt = (TextView) parent.findViewById(resID);
-		if (txt != null)
-		{
-			txt.setText(caption);
-		}
 	}
 }

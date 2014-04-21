@@ -14,6 +14,7 @@ import de.almostintelligent.fhwsplan.data.LectureDate;
 import de.almostintelligent.fhwsplan.data.filters.TimeTableFilter;
 import de.almostintelligent.fhwsplan.data.sort.LectureSortingNameAndRoom;
 import de.almostintelligent.fhwsplan.fragments.SettingsLectureFilterFrament;
+import de.almostintelligent.fhwsplan.utils.Utils;
 import android.os.Bundle;
 import android.util.SparseArray;
 import android.view.Menu;
@@ -21,7 +22,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NavUtils;
@@ -134,9 +134,9 @@ public class SettingsActivity extends FragmentActivity implements
 			LinearLayout newItem = (LinearLayout) getLayoutInflater().inflate(
 					R.layout.settings_timetableitem, null);
 
-			setTextViewTextByID(R.id.item_settings_lecture_name, newItem,
+			Utils.setTextViewTextByID(R.id.item_settings_lecture_name, newItem,
 					l.lecture.getLectureName());
-			setTextViewTextByID(R.id.item_settings_lecture_appendix, newItem,
+			Utils.setTextViewTextByID(R.id.item_settings_lecture_appendix, newItem,
 					l.lecture.getLectureAppendix());
 
 			CheckBox cbSelected = (CheckBox) newItem
@@ -167,7 +167,7 @@ public class SettingsActivity extends FragmentActivity implements
 					++i;
 				}
 
-				setTextViewTextByID(R.id.item_settings_lecture_lecturer,
+				Utils.setTextViewTextByID(R.id.item_settings_lecture_lecturer,
 						newItem, strLecturers.toString());
 
 			}
@@ -204,7 +204,7 @@ public class SettingsActivity extends FragmentActivity implements
 				else
 					strTimes.append("No Time");
 
-				setTextViewTextByID(R.id.item_settings_lecture_times, newItem,
+				Utils.setTextViewTextByID(R.id.item_settings_lecture_times, newItem,
 						strTimes.toString());
 			}
 
@@ -224,17 +224,6 @@ public class SettingsActivity extends FragmentActivity implements
 		buildView();
 
 		setupActionBar();
-	}
-
-	private void setTextViewTextByID(int resID, View parent, String caption)
-	{
-		if (parent == null)
-			return;
-		TextView txt = (TextView) parent.findViewById(resID);
-		if (txt != null)
-		{
-			txt.setText(caption);
-		}
 	}
 
 	/**

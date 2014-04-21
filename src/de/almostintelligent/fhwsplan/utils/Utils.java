@@ -1,5 +1,8 @@
 package de.almostintelligent.fhwsplan.utils;
 
+import android.view.View;
+import android.widget.TextView;
+
 public class Utils
 {
 	public static int maxInArray(int[] array)
@@ -12,5 +15,17 @@ public class Utils
 		}
 
 		return max;
+	}
+
+	public static void setTextViewTextByID(int resID, View parent,
+			String caption)
+	{
+		if (parent == null)
+			return;
+		TextView txt = (TextView) parent.findViewById(resID);
+		if (txt != null)
+		{
+			txt.setText(caption);
+		}
 	}
 }
