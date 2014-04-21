@@ -2,14 +2,14 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/svLectures"
     android:layout_width="match_parent"
-    android:background="@android:color/white"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="@android:color/white" >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/timetable_item_time_space"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/timetable_item_time_space" >
 
         <LinearLayout
             android:id="@+id/timetable_times_container"
@@ -18,13 +18,12 @@
             android:orientation="vertical" >
         </LinearLayout>
 
-        <LinearLayout
+        <android.support.v7.widget.GridLayout
             android:id="@+id/timetable_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:padding="0dp" >
-        </LinearLayout>
+        </android.support.v7.widget.GridLayout>
     </LinearLayout>
 
 </ScrollView>
