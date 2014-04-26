@@ -5,24 +5,23 @@ import java.util.HashSet;
 import java.util.Vector;
 
 import de.almostintelligent.fhwsplan.R;
+import de.almostintelligent.fhwsplan.adapters.SettingsLectureListArrayAdapter;
 import de.almostintelligent.fhwsplan.config.SplanConfig;
 import de.almostintelligent.fhwsplan.data.DataUtils;
 import de.almostintelligent.fhwsplan.data.Employee;
 import de.almostintelligent.fhwsplan.data.Faculty;
 import de.almostintelligent.fhwsplan.data.Lecture;
-import de.almostintelligent.fhwsplan.data.LectureDate;
 import de.almostintelligent.fhwsplan.data.filters.TimeTableFilter;
 import de.almostintelligent.fhwsplan.data.sort.LectureSortingNameAndRoom;
 import de.almostintelligent.fhwsplan.fragments.SettingsLectureFilterFrament;
-import de.almostintelligent.fhwsplan.utils.Utils;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NavUtils;
@@ -31,12 +30,13 @@ public class SettingsActivity extends FragmentActivity implements
 		SettingsLectureFilterFrament.OnFilterDismissListener
 {
 
-	HashSet<Integer>	setSelectedLectures	= new HashSet<Integer>();
-	Vector<CheckBox>	vecCheckboxes		= new Vector<CheckBox>();
+	HashSet<Integer>				setSelectedLectures	= new HashSet<Integer>();
+	SparseArray<CheckBox>			listCheckboxes		= new SparseArray<CheckBox>();
+	SettingsLectureListArrayAdapter	adapter;
 
-	Employee			filterEmployee;
-	Faculty				filterFaculty;
-	Integer				filterSemester		= Integer.valueOf(0);
+	Employee						filterEmployee;
+	Faculty							filterFaculty;
+	Integer							filterSemester		= Integer.valueOf(0);
 
 	public void onFilterButtonClick(View view)
 	{
@@ -48,18 +48,30 @@ public class SettingsActivity extends FragmentActivity implements
 		CheckBox cb = (CheckBox) v;
 		if (cb != null)
 		{
+
 			Integer iLectureID = (Integer) cb
 					.getTag(R.id.settings_cb_lecture_id_tag);
 			if (iLectureID != null)
 			{
+
 				if (setSelectedLectures.contains(iLectureID))
 				{
 					setSelectedLectures.remove(iLectureID);
+					listCheckboxes.remove(iLectureID);
+					if (adapter != null)
+					{
+						adapter.deselectLecture(iLectureID);
+					}
 					cb.setChecked(false);
 				}
 				else
 				{
 					setSelectedLectures.add(iLectureID);
+					listCheckboxes.put(iLectureID, cb);
+					if (adapter != null)
+					{
+						adapter.selectLecture(iLectureID);
+					}
 					cb.setChecked(true);
 				}
 			}
@@ -78,6 +90,7 @@ public class SettingsActivity extends FragmentActivity implements
 
 	private void buildView()
 	{
+		long start = System.nanoTime();
 		Vector<LectureSortingNameAndRoom> listLectures = new Vector<LectureSortingNameAndRoom>();
 
 		SparseArray<Lecture> lectures = DataUtils.get().getLectures();
@@ -110,9 +123,6 @@ public class SettingsActivity extends FragmentActivity implements
 			Integer iKey = lectures.keyAt(i);
 			Lecture l = lectures.get(iKey);
 
-			// Vector<LectureDate> dates = l.getDates();
-
-			// for (LectureDate d : dates)
 			{
 
 				LectureSortingNameAndRoom s = new LectureSortingNameAndRoom();
@@ -126,107 +136,31 @@ public class SettingsActivity extends FragmentActivity implements
 
 		Collections.sort(listLectures);
 
-		LinearLayout container = (LinearLayout) findViewById(R.id.SettingsLecturesContainer);
-		container.removeAllViews();
-
-		float[] hsvArray = new float[] { 0.0f, 1.0f, 1.0f };
-		for (LectureSortingNameAndRoom l : listLectures)
+		ListView listView = (ListView) findViewById(R.id.settings_listview);
+		if (listView != null)
 		{
-
-			LinearLayout newItem = (LinearLayout) getLayoutInflater().inflate(
-					R.layout.settings_timetableitem, null);
-
-			Utils.setTextViewTextByID(R.id.item_settings_lecture_name, newItem,
-					l.lecture.getLectureName());
-			Utils.setTextViewTextByID(R.id.item_settings_lecture_appendix,
-					newItem, l.lecture.getLectureAppendix());
-
-			View vColor = newItem.findViewById(R.id.timetable_item_color);
-			if (vColor != null)
+			Lecture[] arrayLectures = new Lecture[listLectures.size()];
+			int i = 0;
+			for (LectureSortingNameAndRoom l : listLectures)
 			{
-
-				String hash = l.lecture.getLectureName()
-						+ l.lecture.getLectureAppendix();
-				int iColorHash = Math.abs(hash.hashCode() % 360);
-
-				hsvArray[0] = (iColorHash * 1.0f);
-				int iColor = Color.HSVToColor(hsvArray);
-
-				vColor.setBackgroundColor(iColor);
+				arrayLectures[i] = l.lecture;
+				++i;
 			}
 
-			CheckBox cbSelected = (CheckBox) newItem
-					.findViewById(R.id.cbSelectLecture);
-			if (cbSelected != null)
-			{
-				cbSelected.setTag(R.id.settings_cb_lecture_id_tag,
-						l.lecture.getID());
+			adapter = new SettingsLectureListArrayAdapter(this,
+					R.layout.settings_timetableitem, arrayLectures);
 
-				if (setSelectedLectures.contains(l.lecture.getID()))
-				{
-
-					cbSelected.setChecked(true);
-				}
-
-				vecCheckboxes.add(cbSelected);
-
-			}
-
-			{
-				StringBuilder strLecturers = new StringBuilder();
-				int i = 0, iLecturerCount = l.lecture.getLecturers().size();
-				for (Employee e : l.lecture.getLecturers())
-				{
-					strLecturers.append(e.getToken());
-					if (i != iLecturerCount - 1)
-						strLecturers.append(", ");
-					++i;
-				}
-
-				Utils.setTextViewTextByID(R.id.item_settings_lecture_lecturer,
-						newItem, strLecturers.toString());
-
-			}
-
-			{
-				StringBuilder strTimes = new StringBuilder();
-				if (l.lecture.getDates().size() != 0)
-				{
-					int i = 0, iDateCount = l.lecture.getDates().size();
-					for (LectureDate d : l.lecture.getDates())
-					{
-						String strTime;
-						if (l.lecture.getDuration() > 1)
-						{
-							strTime = d.getTime().getStartTime() + " - ";
-							strTime += DataUtils
-									.get()
-									.getTime(
-											d.getTime().getID()
-													+ l.lecture.getDuration()
-													- 1).getEndTime();
-						}
-						else
-						{
-							strTime = d.getTime().getTimeString();
-						}
-						strTimes.append(String.format("%s (%s)", d.getDay()
-								.getShortName(), strTime));
-						if (i != iDateCount - 1)
-							strTimes.append(", ");
-						++i;
-					}
-				}
-				else
-					strTimes.append("No Time");
-
-				Utils.setTextViewTextByID(R.id.item_settings_lecture_times,
-						newItem, strTimes.toString());
-			}
-
-			container.addView(newItem);
+			adapter.setSelectedLectures(setSelectedLectures);
+			adapter.setLectures(lectures);
+			
+			listView.setAdapter(adapter);
+			adapter.notifyDataSetChanged();
 
 		}
+
+		long end = System.nanoTime() - start;
+		Log.e("Settings Build View", String.valueOf(end * 0.000000001));
+
 	}
 
 	@Override
@@ -270,13 +204,14 @@ public class SettingsActivity extends FragmentActivity implements
 				NavUtils.navigateUpFromSameTask(this);
 				return true;
 			case R.id.settings_action_deselect_all_lectures:
-
-				for (CheckBox c : vecCheckboxes)
+				for (int i = 0; i < listCheckboxes.size(); ++i)
 				{
-					c.setChecked(false);
+					Integer iKey = listCheckboxes.keyAt(i);
+					listCheckboxes.get(iKey).setChecked(false);
 				}
 
 				setSelectedLectures.clear();
+				listCheckboxes.clear();
 				return true;
 			case R.id.settings_action_show_filter:
 			{

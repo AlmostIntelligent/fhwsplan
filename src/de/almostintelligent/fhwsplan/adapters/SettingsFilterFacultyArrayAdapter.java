@@ -3,6 +3,7 @@ package de.almostintelligent.fhwsplan.adapters;
 import java.util.Collections;
 import java.util.List;
 
+import de.almostintelligent.fhwsplan.R;
 import de.almostintelligent.fhwsplan.data.Faculty;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -70,7 +71,7 @@ public class SettingsFilterFacultyArrayAdapter extends ArrayAdapter<Faculty>
 
 		Faculty e = new Faculty();
 		e.setID(-1);
-		e.setLongName("Alle");
+		e.setLongName(context.getResources().getString(R.string.all_value));
 
 		objects.add(0, e);
 

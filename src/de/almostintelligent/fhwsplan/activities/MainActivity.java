@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -33,6 +34,7 @@ public class MainActivity extends FragmentActivity
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
+		long startTime = System.nanoTime();
 		super.onCreate(savedInstanceState);
 
 		setupActionBar();
@@ -92,6 +94,9 @@ public class MainActivity extends FragmentActivity
 		}
 
 		DataUtils.get().load(this);
+		long duration = System.nanoTime() - startTime;
+
+		Log.e("Main Create View", String.valueOf(duration*0.000000001));
 
 	}
 

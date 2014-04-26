@@ -22,5 +22,6 @@
     <string name="faculty">Fachrichtung</string>
     <string name="settings_filter">Filter</string>
     <string name="placeholder">Platzhalter</string>
+    <string name="all_value">Alle</string>
 
 </resources>

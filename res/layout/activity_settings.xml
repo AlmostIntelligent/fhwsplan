@@ -5,6 +5,7 @@
     android:orientation="vertical"
     tools:context=".SettingsActivity" >
 
+    <!--
     <ScrollView
         android:id="@+id/svLectures"
         android:layout_width="match_parent"
@@ -18,6 +19,15 @@
             android:orientation="vertical" >
         </LinearLayout>
     </ScrollView>
+    -->
+
+    <ListView
+        android:id="@+id/settings_listview"
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:dividerHeight="0dp" >
+    </ListView>
 
     <LinearLayout
         style="?android:attr/buttonBarStyle"
