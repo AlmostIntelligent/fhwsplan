@@ -91,7 +91,7 @@ public class SettingsLectureFilterFrament extends DialogFragment implements
 		}
 
 		Button btnSave = (Button) view
-				.findViewById(R.id.settings_filter_btnSave);
+				.findViewById(R.id.settings_filter_btnShow);
 		if (btnSave != null)
 		{
 			btnSave.setOnClickListener(this);

@@ -16,7 +16,13 @@ public class Employee extends DataWithID implements Comparable<Employee>
 		{
 			return getPrename();
 		}
-		return String.format("%s %s (%s)", getPrename(), getSurname(),
+		return String.format("%s, %s (%s)", getSurname(), getPrename(),
+				getToken());
+	}
+
+	private String getSortName()
+	{
+		return String.format("%s %s (%s)", getSurname(), getPrename(),
 				getToken());
 	}
 
@@ -92,6 +98,6 @@ public class Employee extends DataWithID implements Comparable<Employee>
 	@Override
 	public int compareTo(Employee another)
 	{
-		return getNameFormated().compareTo(another.getNameFormated());
+		return getSortName().compareTo(another.getSortName());
 	}
 }

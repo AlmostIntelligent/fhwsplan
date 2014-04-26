@@ -49,6 +49,24 @@ public class SettingsLectureListArrayAdapter extends ArrayAdapter<Lecture>
 		listItems = items;
 	}
 
+	public void selectAllLectures()
+	{
+		// setSelectedLectures.clear();
+		for (int i = 0; i < listItems.size(); ++i)
+		{
+			// Integer index = listItems.indexOfKey(i);
+			Lecture l = listItems.valueAt(i);
+			setSelectedLectures.add(l.getID());
+
+		}
+		for (int i = 0; i < listCheckboxes.size(); ++i)
+		{
+			CheckBox cb = listCheckboxes.valueAt(i);
+			if (cb != null)
+				cb.setChecked(true);
+		}
+	}
+
 	public void setSelectedLectures(HashSet<Integer> set)
 	{
 		setSelectedLectures = set;
@@ -59,16 +77,14 @@ public class SettingsLectureListArrayAdapter extends ArrayAdapter<Lecture>
 		return setSelectedLectures.contains(id);
 	}
 
-	public void selectLecture(Integer id, CheckBox cb)
+	public void selectLecture(Integer id)
 	{
 		setSelectedLectures.add(id);
-		listCheckboxes.put(id, cb);
 	}
 
 	public void deselectLecture(Integer id)
 	{
 		setSelectedLectures.remove(id);
-		listCheckboxes.remove(id);
 	}
 
 	public void clearSelection()
@@ -80,7 +96,6 @@ public class SettingsLectureListArrayAdapter extends ArrayAdapter<Lecture>
 		}
 
 		setSelectedLectures.clear();
-		listCheckboxes.clear();
 	}
 
 	@Override
@@ -116,12 +131,16 @@ public class SettingsLectureListArrayAdapter extends ArrayAdapter<Lecture>
 				.findViewById(R.id.cbSelectLecture);
 		if (cbSelected != null)
 		{
+			Integer iPrevLectureID = (Integer) cbSelected
+					.getTag(R.id.settings_cb_lecture_id_tag);
+			if (iPrevLectureID != null)
+				listCheckboxes.remove(iPrevLectureID);
 			cbSelected.setTag(R.id.settings_cb_lecture_id_tag, l.getID());
+			listCheckboxes.put(l.getID(), cbSelected);
 
 			if (setSelectedLectures.contains(l.getID()))
 			{
 				cbSelected.setChecked(true);
-				// cbSelected.callOnClick();
 			}
 			else
 				cbSelected.setChecked(false);

@@ -64,12 +64,12 @@
             android:text="@android:string/cancel" />
 
         <Button
-            android:id="@+id/settings_filter_btnSave"
+            android:id="@+id/settings_filter_btnShow"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/button_save" />
+            android:text="@string/button_show" />
     </LinearLayout>
 
 </LinearLayout>

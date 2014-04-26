@@ -4,6 +4,7 @@
     <string name="app_name">FHW Splan</string>
     <string name="action_edit_timetable">Vorlesungen einstellen</string>
     <string name="settings_deselect_all_lectures">Alle abwählen</string>
+    <string name="settings_select_all_lectures">Alle Auswählen</string>
     <string name="title_activity_settings">Vorlesungen</string>
     <string name="week_day_mon_short">Mo</string>
     <string name="week_day_tue_short">Di</string>
@@ -16,6 +17,7 @@
     <string name="week_day_thu_long">Donnerstag</string>
     <string name="week_day_fri_long">Freitag</string>
     <string name="button_save">Speichern</string>
+    <string name="button_show">Anzeigen</string>
     <string name="lecture">Vorlesung</string>
     <string name="semester">Semester</string>
     <string name="employee">"Mitarbeiter"</string>

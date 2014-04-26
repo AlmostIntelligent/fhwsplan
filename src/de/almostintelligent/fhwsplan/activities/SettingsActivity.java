@@ -60,7 +60,7 @@ public class SettingsActivity extends FragmentActivity implements
 					else
 					{
 
-						adapter.selectLecture(iLectureID, cb);
+						adapter.selectLecture(iLectureID);
 						cb.setChecked(true);
 					}
 
@@ -193,6 +193,10 @@ public class SettingsActivity extends FragmentActivity implements
 				if (adapter != null)
 					adapter.clearSelection();
 				return true;
+			case R.id.settings_select_all_lectures:
+				if (adapter != null)
+					adapter.selectAllLectures();
+				break;
 			case R.id.settings_action_show_filter:
 			{
 				FragmentManager fm = getSupportFragmentManager();
@@ -208,7 +212,7 @@ public class SettingsActivity extends FragmentActivity implements
 	@Override
 	public void onFilterDismiss(int iRes, SettingsLectureFilterFrament fragment)
 	{
-		if (iRes == R.id.settings_filter_btnSave)
+		if (iRes == R.id.settings_filter_btnShow)
 		{
 			filterEmployee = (Employee) fragment.employeeSpinner
 					.getSelectedItem();
