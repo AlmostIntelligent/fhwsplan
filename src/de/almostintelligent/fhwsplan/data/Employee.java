@@ -83,10 +83,10 @@ public class Employee extends DataWithID implements Comparable<Employee>
 
 	public void print()
 	{
-		Log.e("employee.id", getID().toString());
-		Log.e("employee.token", strToken);
-		Log.e("employee.prename", strPrename);
-		Log.e("employee.surname", strSurname);
+		Log.d("employee.id", getID().toString());
+		Log.d("employee.token", strToken);
+		Log.d("employee.prename", strPrename);
+		Log.d("employee.surname", strSurname);
 	}
 
 	@Override

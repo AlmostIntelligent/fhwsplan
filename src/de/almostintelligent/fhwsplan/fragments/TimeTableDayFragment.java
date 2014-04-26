@@ -159,7 +159,8 @@ public class TimeTableDayFragment extends android.support.v4.app.Fragment
 				if (params != null)
 				{
 					params.setMargins(params.leftMargin, params.topMargin
-							+ iMarginTop, params.rightMargin, params.bottomMargin);
+							+ iMarginTop, params.rightMargin,
+							params.bottomMargin);
 				}
 			}
 
@@ -330,18 +331,6 @@ public class TimeTableDayFragment extends android.support.v4.app.Fragment
 			}
 		}
 
-		// StringBuilder b = new StringBuilder();
-		// b.append("start\n");
-		// for (int[] cols : iLectureGrid)
-		// {
-		// for (int id : cols)
-		// {
-		// b.append(String.valueOf(id) + " ");
-		// }
-		// b.append("\n");
-		// }
-		// b.append("ende\n");
-		// Log.e("timetable", b.toString());
 		return iLectureGrid;
 	}
 }

@@ -64,20 +64,9 @@ public class PlanTime// implements Comparable<PlanTime>
 
 	public void print()
 	{
-		Log.e("plantime.id", iID.toString());
-		Log.e("plantime.desc", strDescription);
+		Log.d("plantime.id", iID.toString());
+		Log.d("plantime.desc", strDescription);
 
 	}
-
-	// @Override
-	// public int compareTo(PlanTime another)
-	// {
-	// if (getID() < another.getID())
-	// return -1;
-	// if (getID() == another.getID())
-	// return 0;
-	// else
-	// return 1;
-	// }
 
 }

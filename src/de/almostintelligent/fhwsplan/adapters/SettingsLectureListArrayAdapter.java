@@ -3,6 +3,7 @@ package de.almostintelligent.fhwsplan.adapters;
 import java.util.HashSet;
 
 import de.almostintelligent.fhwsplan.R;
+import de.almostintelligent.fhwsplan.config.SplanConfig;
 import de.almostintelligent.fhwsplan.data.Lecture;
 import de.almostintelligent.fhwsplan.utils.Utils;
 import android.content.Context;
@@ -17,19 +18,31 @@ import android.widget.CheckBox;
 public class SettingsLectureListArrayAdapter extends ArrayAdapter<Lecture>
 {
 
-	public SettingsLectureListArrayAdapter(Context context, int resource,
-			Lecture[] objects)
-	{
-		super(context, resource, objects);
-		iResource = resource;
-		// TODO Auto-generated constructor stub
-	}
-
 	float[]					hsvArray			= new float[] { 0.0f, 1.0f,
 			1.0f								};
 	HashSet<Integer>		setSelectedLectures	= new HashSet<Integer>();
+	SparseArray<CheckBox>	listCheckboxes		= new SparseArray<CheckBox>();
 	SparseArray<Lecture>	listItems;
 	int						iResource;
+
+	public SettingsLectureListArrayAdapter(Context context, int resource,
+			Lecture[] objects, SettingsLectureListArrayAdapter old)
+	{
+		super(context, resource, objects);
+		iResource = resource;
+		if (old == null)
+		{
+			setSelectedLectures = SplanConfig.LoadSelectedIDs(context);
+		}
+		else
+			setSelectedLectures = old.setSelectedLectures;
+		// TODO Auto-generated constructor stub
+	}
+
+	public void saveSelectedLectures()
+	{
+		SplanConfig.SaveSelectedIDs(getContext(), setSelectedLectures);
+	}
 
 	public void setLectures(SparseArray<Lecture> items)
 	{
@@ -41,14 +54,33 @@ public class SettingsLectureListArrayAdapter extends ArrayAdapter<Lecture>
 		setSelectedLectures = set;
 	}
 
-	public void selectLecture(Integer id)
+	public boolean isSelected(Integer id)
+	{
+		return setSelectedLectures.contains(id);
+	}
+
+	public void selectLecture(Integer id, CheckBox cb)
 	{
 		setSelectedLectures.add(id);
+		listCheckboxes.put(id, cb);
 	}
 
 	public void deselectLecture(Integer id)
 	{
 		setSelectedLectures.remove(id);
+		listCheckboxes.remove(id);
+	}
+
+	public void clearSelection()
+	{
+		for (int i = 0; i < listCheckboxes.size(); ++i)
+		{
+			Integer iKey = listCheckboxes.keyAt(i);
+			listCheckboxes.get(iKey).setChecked(false);
+		}
+
+		setSelectedLectures.clear();
+		listCheckboxes.clear();
 	}
 
 	@Override

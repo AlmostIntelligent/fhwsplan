@@ -50,8 +50,8 @@ public class Room
 
 	public void print()
 	{
-		Log.e("room.id", iID.toString());
-		Log.e("room.short", strShortName);
-		Log.e("room.long", strLongName);
+		Log.d("room.id", iID.toString());
+		Log.d("room.short", strShortName);
+		Log.d("room.long", strLongName);
 	}
 }

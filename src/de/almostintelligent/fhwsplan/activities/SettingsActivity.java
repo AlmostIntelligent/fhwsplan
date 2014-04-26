@@ -1,12 +1,10 @@
 package de.almostintelligent.fhwsplan.activities;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Vector;
 
 import de.almostintelligent.fhwsplan.R;
 import de.almostintelligent.fhwsplan.adapters.SettingsLectureListArrayAdapter;
-import de.almostintelligent.fhwsplan.config.SplanConfig;
 import de.almostintelligent.fhwsplan.data.DataUtils;
 import de.almostintelligent.fhwsplan.data.Employee;
 import de.almostintelligent.fhwsplan.data.Faculty;
@@ -15,7 +13,6 @@ import de.almostintelligent.fhwsplan.data.filters.TimeTableFilter;
 import de.almostintelligent.fhwsplan.data.sort.LectureSortingNameAndRoom;
 import de.almostintelligent.fhwsplan.fragments.SettingsLectureFilterFrament;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,13 +27,13 @@ public class SettingsActivity extends FragmentActivity implements
 		SettingsLectureFilterFrament.OnFilterDismissListener
 {
 
-	HashSet<Integer>				setSelectedLectures	= new HashSet<Integer>();
-	SparseArray<CheckBox>			listCheckboxes		= new SparseArray<CheckBox>();
+	// HashSet<Integer> setSelectedLectures = new HashSet<Integer>();
+	// SparseArray<CheckBox> listCheckboxes = new SparseArray<CheckBox>();
 	SettingsLectureListArrayAdapter	adapter;
 
 	Employee						filterEmployee;
 	Faculty							filterFaculty;
-	Integer							filterSemester		= Integer.valueOf(0);
+	Integer							filterSemester	= Integer.valueOf(0);
 
 	public void onFilterButtonClick(View view)
 	{
@@ -53,26 +50,20 @@ public class SettingsActivity extends FragmentActivity implements
 					.getTag(R.id.settings_cb_lecture_id_tag);
 			if (iLectureID != null)
 			{
-
-				if (setSelectedLectures.contains(iLectureID))
+				if (adapter != null)
 				{
-					setSelectedLectures.remove(iLectureID);
-					listCheckboxes.remove(iLectureID);
-					if (adapter != null)
+					if (adapter.isSelected(iLectureID))
 					{
 						adapter.deselectLecture(iLectureID);
+						cb.setChecked(false);
 					}
-					cb.setChecked(false);
-				}
-				else
-				{
-					setSelectedLectures.add(iLectureID);
-					listCheckboxes.put(iLectureID, cb);
-					if (adapter != null)
+					else
 					{
-						adapter.selectLecture(iLectureID);
+
+						adapter.selectLecture(iLectureID, cb);
+						cb.setChecked(true);
 					}
-					cb.setChecked(true);
+
 				}
 			}
 		}
@@ -82,7 +73,8 @@ public class SettingsActivity extends FragmentActivity implements
 	{
 		if (v.getId() == R.id.btnSettingsSave)
 		{
-			SplanConfig.SaveSelectedIDs(this, setSelectedLectures);
+			if (adapter != null)
+				adapter.saveSelectedLectures();
 		}
 
 		NavUtils.navigateUpFromSameTask(this);
@@ -90,7 +82,7 @@ public class SettingsActivity extends FragmentActivity implements
 
 	private void buildView()
 	{
-		long start = System.nanoTime();
+
 		Vector<LectureSortingNameAndRoom> listLectures = new Vector<LectureSortingNameAndRoom>();
 
 		SparseArray<Lecture> lectures = DataUtils.get().getLectures();
@@ -148,18 +140,14 @@ public class SettingsActivity extends FragmentActivity implements
 			}
 
 			adapter = new SettingsLectureListArrayAdapter(this,
-					R.layout.settings_timetableitem, arrayLectures);
+					R.layout.settings_timetableitem, arrayLectures, adapter);
 
-			adapter.setSelectedLectures(setSelectedLectures);
 			adapter.setLectures(lectures);
-			
+
 			listView.setAdapter(adapter);
 			adapter.notifyDataSetChanged();
 
 		}
-
-		long end = System.nanoTime() - start;
-		Log.e("Settings Build View", String.valueOf(end * 0.000000001));
 
 	}
 
@@ -168,8 +156,6 @@ public class SettingsActivity extends FragmentActivity implements
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_settings);
-
-		setSelectedLectures = SplanConfig.LoadSelectedIDs(this);
 
 		buildView();
 
@@ -204,14 +190,8 @@ public class SettingsActivity extends FragmentActivity implements
 				NavUtils.navigateUpFromSameTask(this);
 				return true;
 			case R.id.settings_action_deselect_all_lectures:
-				for (int i = 0; i < listCheckboxes.size(); ++i)
-				{
-					Integer iKey = listCheckboxes.keyAt(i);
-					listCheckboxes.get(iKey).setChecked(false);
-				}
-
-				setSelectedLectures.clear();
-				listCheckboxes.clear();
+				if (adapter != null)
+					adapter.clearSelection();
 				return true;
 			case R.id.settings_action_show_filter:
 			{

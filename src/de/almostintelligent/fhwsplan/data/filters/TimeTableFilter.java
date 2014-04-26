@@ -82,7 +82,7 @@ public class TimeTableFilter
 
 	public void printSize(String msg)
 	{
-		Log.e("TimeTableFilter.printsize", Integer.valueOf(_lectures.size())
+		Log.d("TimeTableFilter.printsize", Integer.valueOf(_lectures.size())
 				.toString() + " Items: " + msg);
 	}
 

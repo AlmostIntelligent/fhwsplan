@@ -51,12 +51,12 @@ public class Faculty extends DataWithID implements Comparable<Faculty>
 
 	public void print()
 	{
-		Log.e("faculty.id", getID().toString());
-		Log.e("faculty.short", strShortName);
-		Log.e("faculty.long", strLongName);
+		Log.d("faculty.id", getID().toString());
+		Log.d("faculty.short", strShortName);
+		Log.d("faculty.long", strLongName);
 		for (Integer i : semester)
 		{
-			Log.e("faculty.sem", i.toString());
+			Log.d("faculty.sem", i.toString());
 		}
 
 	}

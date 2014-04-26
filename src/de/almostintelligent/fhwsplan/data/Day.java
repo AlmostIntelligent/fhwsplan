@@ -31,9 +31,9 @@ public class Day extends DataWithID
 
 	public void print()
 	{
-		Log.e("day.id", getID().toString());
-		Log.e("day.short", strShortName);
-		Log.e("day.long", strLongName);
+		Log.d("day.id", getID().toString());
+		Log.d("day.short", strShortName);
+		Log.d("day.long", strLongName);
 	}
 
 }

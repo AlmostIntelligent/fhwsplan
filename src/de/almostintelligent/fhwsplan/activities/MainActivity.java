@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -34,7 +33,6 @@ public class MainActivity extends FragmentActivity
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
-		long startTime = System.nanoTime();
 		super.onCreate(savedInstanceState);
 
 		setupActionBar();
@@ -69,16 +67,16 @@ public class MainActivity extends FragmentActivity
 					getSupportFragmentManager());
 
 			String[] dayStrings = new String[5];
-			dayStrings[0] = getResources().getString(
-					R.string.week_day_mon_long);
-			dayStrings[1] = getResources().getString(
-					R.string.week_day_tue_long);
-			dayStrings[2] = getResources().getString(
-					R.string.week_day_wed_long);
-			dayStrings[3] = getResources().getString(
-					R.string.week_day_thu_long);
-			dayStrings[4] = getResources().getString(
-					R.string.week_day_fri_long);
+			dayStrings[0] = getResources()
+					.getString(R.string.week_day_mon_long);
+			dayStrings[1] = getResources()
+					.getString(R.string.week_day_tue_long);
+			dayStrings[2] = getResources()
+					.getString(R.string.week_day_wed_long);
+			dayStrings[3] = getResources()
+					.getString(R.string.week_day_thu_long);
+			dayStrings[4] = getResources()
+					.getString(R.string.week_day_fri_long);
 
 			fpaDays.setDayString(dayStrings);
 
@@ -94,9 +92,6 @@ public class MainActivity extends FragmentActivity
 		}
 
 		DataUtils.get().load(this);
-		long duration = System.nanoTime() - startTime;
-
-		Log.e("Main Create View", String.valueOf(duration*0.000000001));
 
 	}
 

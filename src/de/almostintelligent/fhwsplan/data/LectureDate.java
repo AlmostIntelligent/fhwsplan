@@ -56,7 +56,7 @@ public class LectureDate
 
 	public void print()
 	{
-		Log.e("lecturedate.id", "..");
+		Log.d("lecturedate.id", "..");
 		day.print();
 		time.print();
 		for (Room r : rooms)

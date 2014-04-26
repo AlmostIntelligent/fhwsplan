@@ -175,15 +175,11 @@ public class Lecture extends DataWithID implements Comparable<Lecture>
 
 	public void print()
 	{
-		Log.e("divider",
+		Log.d("divider",
 				"--------------------------------------------------------------------------");
-		Log.e("lecture", getID().toString() + ": " + strDescription
+		Log.d("lecture", getID().toString() + ": " + strDescription
 				+ strDescAppendix);
 
-		// for (Employee e : lecturers)
-		// {
-		// Log.e("lecture.lecturer", e.getPrename() + " " + e.getSurname());
-		// }
 		int key = 0;
 		for (int i = 0; i < facultySemesterInLecture.size(); i++)
 		{
@@ -198,7 +194,7 @@ public class Lecture extends DataWithID implements Comparable<Lecture>
 				strMsg = strMsg + " " + sem.toString();
 			}
 
-			Log.e("lecture.faculty", strMsg);
+			Log.d("lecture.faculty", strMsg);
 		}
 
 	}
