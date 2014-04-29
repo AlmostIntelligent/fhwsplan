@@ -2,8 +2,8 @@
 <resources>
 
     <string name="app_name">FHW Splan</string>
-    <string name="settings_deselect_all_lectures">Deselect All</string>
-    <string name="settings_select_all_lectures">Select All</string>
+    <string name="settings_deselect_all_lectures">Deselect all</string>
+    <string name="settings_select_all_lectures">Select all filtered</string>
     <string name="action_edit_timetable">Edit lectures</string>
     <string name="week_day_mon_short">Mon</string>
     <string name="week_day_tue_short">Tue</string>
@@ -17,7 +17,7 @@
     <string name="week_day_fri_long">Friday</string>
     <string name="title_activity_settings">Select Lectures</string>
     <string name="button_save">Save</string>
-    <string name="button_show">Anzeigen</string>
+    <string name="button_show">Show</string>
     <string name="lecture">Lecture</string>
     <string name="semester">Semester</string>
     <string name="employee">"Employee"</string>
