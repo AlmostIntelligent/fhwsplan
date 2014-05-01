@@ -1,14 +1,66 @@
 package de.almostintelligent.fhwsplan.utils;
 
+import java.io.File;
+import java.io.IOException;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
+
 import de.almostintelligent.fhwsplan.data.DataUtils;
 import de.almostintelligent.fhwsplan.data.Employee;
 import de.almostintelligent.fhwsplan.data.Lecture;
 import de.almostintelligent.fhwsplan.data.LectureDate;
+import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 public class Utils
 {
+	public static Document openXml(Context c, String filename)
+	{
+		Document document = null;
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		Log.e("Utils.openXml", "Loading: " + filename);
+		try
+		{
+			DocumentBuilder builder = dbf.newDocumentBuilder();
+			// d = builder.parse(new File(c.getFilesDir(), filename));
+			// document = builder.parse(c.getAssets().open(filename));
+			document = builder.parse(new File(c.getFilesDir(), filename));
+
+			if (document == null)
+			{
+				Log.e("Utils.openXml", "Loading of file " + filename
+						+ " failed.");
+			}
+		}
+		catch (ParserConfigurationException e)
+		{
+			e.printStackTrace();
+		}
+		catch (SAXException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (IllegalArgumentException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return document;
+	}
+
 	public static int maxInArray(int[] array)
 	{
 		int max = Integer.MIN_VALUE;

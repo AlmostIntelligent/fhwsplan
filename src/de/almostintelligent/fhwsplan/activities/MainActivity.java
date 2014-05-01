@@ -7,10 +7,12 @@ import com.example.android.common.view.SlidingTabLayout;
 import de.almostintelligent.fhwsplan.R;
 import de.almostintelligent.fhwsplan.adapters.TimeTableDaysFragmentPagerAdapter;
 import de.almostintelligent.fhwsplan.data.DataUtils;
+import de.almostintelligent.fhwsplan.utils.PlanManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -38,6 +40,15 @@ public class MainActivity extends FragmentActivity
 		setupActionBar();
 
 		setContentView(R.layout.activity_splan);
+
+		PlanManager pm = new PlanManager();
+		if (pm.load(this))
+		{
+			if (!pm.save(this))
+			{
+				Log.e("MainActivity", "Save failed");
+			}
+		}
 
 		if (savedInstanceState != null)
 		{

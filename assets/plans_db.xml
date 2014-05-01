@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plans>
+	<plan name="Test">
+		<lecture>0</lecture>
+		<lecture>1</lecture>
+		<lecture>2</lecture>
+		<lecture>3</lecture>
+		<lecture>4</lecture>
+	</plan>
+	<plan name="Test 2">
+		<lecture>0</lecture>
+		<lecture>1</lecture>
+		<lecture>2</lecture>
+		<lecture>3</lecture>
+		<lecture>4</lecture>
+	</plan>
+</plans>
