@@ -2,6 +2,9 @@ package de.almostintelligent.fhwsplan.utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -20,6 +23,51 @@ import android.widget.TextView;
 
 public class Utils
 {
+	public static Set<Integer> getLecturesFromURL(String strUrl)
+	{
+		Set<Integer> result = null;
+
+		strUrl = strUrl.substring(strUrl.indexOf('?') + 1);
+		String[] parts = strUrl.split("&");
+
+		result = new HashSet<Integer>();
+		boolean bTypFound = false;
+
+		for (String part : parts)
+		{
+			String[] elements = part.split("=");
+			if (elements.length == 2)
+			{
+				if (elements[0].equals("typ")
+						&& elements[1].equals("benutzer_vz_ausgabe"))
+					bTypFound = true;
+
+				if (elements[0].equals("id"))
+				{
+					try
+					{
+						Integer id = Integer.valueOf(elements[1]);
+						result.add(id);
+					}
+					catch (NumberFormatException e)
+					{
+						Log.w("Utils.getLecturesFromURL",
+								"Could not convert ID");
+					}
+				}
+
+			}
+		}
+
+		if (!bTypFound)
+		{
+			Log.w("Utils.getLecturesFromURL",
+					"Splan URL is not of type 'benutzer_vz_ausgabe'");
+		}
+
+		return result;
+	}
+
 	public static Document openXml(Context c, String filename)
 	{
 		Document document = null;

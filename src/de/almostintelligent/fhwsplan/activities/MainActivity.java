@@ -1,13 +1,14 @@
 package de.almostintelligent.fhwsplan.activities;
 
 import java.util.Calendar;
+import java.util.Set;
 
 import com.example.android.common.view.SlidingTabLayout;
 
 import de.almostintelligent.fhwsplan.R;
 import de.almostintelligent.fhwsplan.adapters.TimeTableDaysFragmentPagerAdapter;
 import de.almostintelligent.fhwsplan.data.DataUtils;
-import de.almostintelligent.fhwsplan.utils.PlanManager;
+import de.almostintelligent.fhwsplan.utils.Utils;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -40,14 +41,11 @@ public class MainActivity extends FragmentActivity
 		setupActionBar();
 
 		setContentView(R.layout.activity_splan);
-
-		PlanManager pm = new PlanManager();
-		if (pm.load(this))
+		String strUrl = "http://www.fh-wedel.de/~splan/index.html?typ=benutzer_vz_ausgabe&id=83&id=1&id=201&id=78&id=79&id=80&id=81&id=82&id=2&id=39&id=93&id=141&id=199&id=142&id=56&id=172";
+		Set<Integer> res = Utils.getLecturesFromURL(strUrl);
+		if (res != null)
 		{
-			if (!pm.save(this))
-			{
-				Log.e("MainActivity", "Save failed");
-			}
+			Log.e("Lectures:", String.valueOf(res.size()));
 		}
 
 		if (savedInstanceState != null)
